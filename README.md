@@ -4,11 +4,15 @@ A collection of basic data structures for C.
 
 # Installation
 
-## Download [Emeralds](https://github.com/Oblivious-Oblivious/Emeralds) package manager
+**Download [Emeralds](https://github.com/Oblivious-Oblivious/Emeralds) package manager**
+
+```sh
+git clone https://github.com/Oblivious-Oblivious/Emeralds
+```
 
 **Run the install script**
 
-```
+```sh
 chmod 755 install.sh
 ./install.sh
 ```
