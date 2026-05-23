@@ -35,7 +35,7 @@
 #include "min-pq-binary-heap/min-pq-binary-heap.h"
 #include "preprocessor/preprocessor.h"
 #include "stack/stack.h"
-#include "string/string.h"
+#include "string/estring.h"
 #include "table/table.h"
 #include "vector/vector.h"
 

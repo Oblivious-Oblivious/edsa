@@ -2,7 +2,7 @@
 #define __EDSA_FILE_HANDLER_H_
 
 #include "../boolean/boolean.h"
-#include "../string/string.h"
+#include "../string/estring.h"
 
 #include <stdio.h> /* FILE */
 
