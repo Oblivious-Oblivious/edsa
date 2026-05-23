@@ -4,11 +4,35 @@ A collection of basic data structures for C.
 
 # Installation
 
-- Install the library
+## Download [Emeralds](https://github.com/Oblivious-Oblivious/Emeralds) package manager
 
-`em list`
-`em install`
-`em build lib release`
+**Run the install script**
+
+```
+chmod 755 install.sh
+./install.sh
+```
+
+**On windows**
+
+```
+.\install-win32.bat
+```
+
+## Compile the library
+
+```sh
+em list
+em install
+em build lib release
+```
+
+## Compile your code
+
+```sh
+# requires the edsa static library included in the export folder along with edsa.h
+clang export/edsa.a your-code.c
+```
 
 ## Usage
 
