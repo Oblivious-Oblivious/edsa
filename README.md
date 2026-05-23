@@ -2,7 +2,7 @@
 
 A collection of basic data structures for C.
 
-# Installation
+## Installation
 
 **Download [Emeralds](https://github.com/Oblivious-Oblivious/Emeralds) package manager**
 
