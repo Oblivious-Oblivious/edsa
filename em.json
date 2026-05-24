@@ -51,18 +51,18 @@
       }
     },
     "win32": {
-      "cc": "gcc",
+      "cc": "cl",
       "debug": {
-        "opt": "-O2",
-        "version": "-std=c89",
-        "flags": "-g",
-        "warnings": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic"
+        "opt": "/Od",
+        "version": "/std:c11",
+        "flags": "/Zi /MDd",
+        "warnings": "/W4 /WX"
       },
       "release": {
-        "opt": "-O2",
-        "version": "-std=c89",
-        "flags": "",
-        "warnings": ""
+        "opt": "/O2",
+        "version": "/std:c11",
+        "flags": "/MD",
+        "warnings": "/W4"
       }
     }
   },
