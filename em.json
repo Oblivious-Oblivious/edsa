@@ -55,14 +55,14 @@
       "debug": {
         "opt": "/Od",
         "version": "/std:c11",
-        "flags": "/Zi /MDd",
-        "warnings": "/W4 /WX"
+        "flags": "",
+        "warnings": ""
       },
       "release": {
         "opt": "/O2",
         "version": "/std:c11",
-        "flags": "/MD",
-        "warnings": "/W4"
+        "flags": "",
+        "warnings": ""
       }
     }
   },
