@@ -6,9 +6,7 @@
   #define PREPROCESSOR_GNU
 #endif
 
-#if defined(_MSC_VER)
-  #define PREPROCESSOR_C_VERSION 1989
-#elif defined(__STDC_VERSION__)
+#if defined(__STDC_VERSION__)
   #if __STDC_VERSION__ >= 202000L
     #define PREPROCESSOR_C_VERSION 2023
   #elif __STDC_VERSION__ >= 201710L
@@ -22,6 +20,9 @@
   #else
     #define PREPROCESSOR_C_VERSION 1989
   #endif
+/* Default MSVC C mode (no /std:c11 or /std:c17) is C89 with extensions. */
+#elif defined(_MSC_VER)
+  #define PREPROCESSOR_C_VERSION 1989
 /* Older GCC/Clang without __STDC_VERSION__ */
 #elif defined(__GNUC__) || defined(__clang__)
   #define PREPROCESSOR_C_VERSION 1989
