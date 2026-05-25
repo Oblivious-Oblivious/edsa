@@ -44,23 +44,23 @@
         "warnings": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic"
       },
       "release": {
-        "opt": "-O3",
-        "version": "",
+        "opt": "-O2",
+        "version": "-std=c89",
         "flags": "",
         "warnings": ""
       }
     },
     "win32": {
-      "cc": "cl",
+      "cc": "gcc",
       "debug": {
-        "opt": "/Od",
-        "version": "/std:c11",
-        "flags": "",
-        "warnings": ""
+        "opt": "-O2",
+        "version": "-std=c89",
+        "flags": "-g",
+        "warnings": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic"
       },
       "release": {
-        "opt": "/O2",
-        "version": "/std:c11",
+        "opt": "-O2",
+        "version": "-std=c89",
         "flags": "",
         "warnings": ""
       }
