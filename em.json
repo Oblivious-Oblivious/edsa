@@ -10,7 +10,7 @@
   },
   "lintignore": {
     "extensions": [],
-    "directories": ["libs", "src/table/hash/xxh3"]
+    "directories": ["libs", "src/table/hash/xxh3/xxh3_implementation.h"]
   },
   "scripts": {
     "test-table": [

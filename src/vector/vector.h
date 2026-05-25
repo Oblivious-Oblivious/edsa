@@ -381,16 +381,16 @@ long *_vector_long_new(size_t argc, ...);
  * @param fold -> The folding function to use
  * @param res -> The result pointer
  **/
-#define vector_reduce(self, fold, res) \
-  do {                                 \
+#define vector_reduce(self, fold, res)          \
+  do {                                          \
     if(self != NULL && vector_size(self) > 0) { \
-      size_t i;                        \
-      size_t vlen = vector_size(self); \
-      *res = self[0];                  \
-      for(i = 1; i < vlen; i++) {      \
-        *res = fold(*res, self[i]);    \
-      }                                \
-    }                                  \
+      size_t i;                                 \
+      size_t vlen = vector_size(self);          \
+      *res        = self[0];                    \
+      for(i = 1; i < vlen; i++) {               \
+        *res = fold(*res, self[i]);             \
+      }                                         \
+    }                                           \
   } while(0)
 
 /** @brief Pushes an element to the end of the vector (alias for vector_add) */
