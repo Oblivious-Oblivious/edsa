@@ -118,8 +118,8 @@ void table_add(EdsaTable *self, const char *key, size_t value) {
   bucket_index = _table_find_bucket(
     self->hashes, self->states, hash, self->keys, key, keylen, true
   );
-  prev_state = self->states[bucket_index];
   if(bucket_index != TABLE_UNDEFINED) {
+    prev_state = self->states[bucket_index];
     self->hashes[bucket_index] = hash;
     self->keys[bucket_index]   = key;
     self->values[bucket_index] = value;
@@ -190,4 +190,10 @@ void table_deinit(EdsaTable *self) {
   vector_free(self->states);
   vector_free(self->keys);
   vector_free(self->values);
+  self->hashes    = NULL;
+  self->states    = NULL;
+  self->keys      = NULL;
+  self->values    = NULL;
+  self->size       = 0;
+  self->tombstones = 0;
 }
