@@ -80,18 +80,41 @@ static void pq_min_heapify(EdsaMinPQBinaryHeap *self, size_t index) {
 EdsaMinPQBinaryHeap *pq_new(size_t max_size) {
   EdsaMinPQBinaryHeap *self =
     (EdsaMinPQBinaryHeap *)malloc(sizeof(EdsaMinPQBinaryHeap));
+  if(self == NULL) {
+    return NULL;
+  }
   self->max_size = max_size;
   self->size     = 0;
-  self->A        = (void **)malloc(sizeof(void *) * self->max_size);
+  self->A        = (void **)malloc(sizeof(void *) * (self->max_size + 1));
 
-  return self;
+  if(self->A == NULL) {
+    free(self);
+    return NULL;
+  } else {
+    return self;
+  }
 }
 
-bool pq_is_empty(EdsaMinPQBinaryHeap *self) { return self->size == 0; }
+bool pq_is_empty(EdsaMinPQBinaryHeap *self) {
+  if(self == NULL) {
+    return true;
+  } else {
+    return self->size == 0;
+  }
+}
 
-void *pq_get_min(EdsaMinPQBinaryHeap *self) { return self->A[1]; }
+void *pq_get_min(EdsaMinPQBinaryHeap *self) {
+  if(pq_is_empty(self)) {
+    return NULL;
+  } else {
+    return self->A[1];
+  }
+}
 
 void *pq_delete_min(EdsaMinPQBinaryHeap *self) {
+  if(pq_is_empty(self)) {
+    return NULL;
+  }
   void *minm = self->A[1];
   self->A[1] = self->A[self->size];
   self->size--;
@@ -113,6 +136,9 @@ void pq_fix_down(EdsaMinPQBinaryHeap *self, size_t index, void *key) {
 }
 
 void pq_insert(EdsaMinPQBinaryHeap *self, void *key) {
+  if(self->size >= self->max_size) {
+    return;
+  }
   self->size++;
   self->A[self->size] = NULL;
   pq_fix_up(self, self->size, key);
@@ -120,6 +146,9 @@ void pq_insert(EdsaMinPQBinaryHeap *self, void *key) {
 
 void pq_print(EdsaMinPQBinaryHeap *self) {
   size_t i;
+  if(self == NULL) {
+    return;
+  }
   for(i = 1; i <= self->size; i++) {
     printf("%ld\n", (long)self->A[i]);
   }
@@ -127,13 +156,25 @@ void pq_print(EdsaMinPQBinaryHeap *self) {
 }
 
 void pq_reset(EdsaMinPQBinaryHeap *self) {
-  pq_free(self);
-  self = pq_new(self->size);
+  if(self == NULL) {
+    return;
+  }
+  size_t saved_size = self->max_size;
+  free(self->A);
+  self->A = (void **)malloc(sizeof(void *) * (saved_size + 1));
+  if(self->A == NULL) {
+    self->size     = 0;
+    self->max_size = 0;
+    return;
+  }
+  self->size     = 0;
+  self->max_size = saved_size;
 }
 
 void pq_free(EdsaMinPQBinaryHeap *self) {
-  /* TODO -> GIVE A FUNCTION FOR CUSTOM ELEMENTS */
-
+  if(self == NULL) {
+    return;
+  }
   free(self->A);
   free(self);
 }
