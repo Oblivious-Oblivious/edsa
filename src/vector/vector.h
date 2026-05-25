@@ -383,11 +383,10 @@ long *_vector_long_new(size_t argc, ...);
  **/
 #define vector_reduce(self, fold, res) \
   do {                                 \
-    size_t vlen;                       \
-    if(self != NULL) {                 \
+    if(self != NULL && vector_size(self) > 0) { \
       size_t i;                        \
+      size_t vlen = vector_size(self); \
       *res = self[0];                  \
-      vlen = vector_size(self);        \
       for(i = 1; i < vlen; i++) {      \
         *res = fold(*res, self[i]);    \
       }                                \

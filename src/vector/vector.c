@@ -3,6 +3,7 @@
 void *
 _vector_growf(void *self, size_t elemsize, size_t addlen, size_t min_cap) {
   void *b;
+  void *old_header;
   size_t min_len = vector_size(self) + addlen;
 
   if(min_len > min_cap) {
@@ -19,10 +20,11 @@ _vector_growf(void *self, size_t elemsize, size_t addlen, size_t min_cap) {
     min_cap = 4;
   }
 
-  b = vector_allocator(
-    (self) ? _vector_get_header(self) : 0,
-    elemsize * min_cap + sizeof(_vector_header)
-  );
+  old_header = (self) ? _vector_get_header(self) : 0;
+  b = vector_allocator(old_header, elemsize * min_cap + sizeof(_vector_header));
+  if(b == NULL) {
+    return self;
+  }
   b = (char *)b + sizeof(_vector_header);
 
   if(self == NULL) {
