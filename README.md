@@ -40,7 +40,7 @@ clang export/edsa.a your-code.c
 
 ## Usage
 
-### Booleans
+### Boolean
 
 ```c
 #include "edsa.h"
@@ -104,8 +104,45 @@ int main(void) {
   linked_list_add(l, (void*)1);
   linked_list_add(l, (void*)2);
 
-  int v1 = linked_list_get(l, 0);
-  printf("%d\n", v1);
+  linked_list_remove(l, (void*)1);
+
+  linked_list_free(l);
+}
+```
+
+### Min Priority Queue (Binary Heap)
+
+```c
+#include "edsa.h"
+
+int main(void) {
+  EdsaMinPQBinaryHeap *pq = pq_new(10);
+
+  pq_insert(pq, (void*)30);
+  pq_insert(pq, (void*)10);
+  pq_insert(pq, (void*)20);
+
+  void *min = pq_get_min(pq);
+  printf("%ld\n", (long)min); /* 10 */
+
+  pq_delete_min(pq);
+  printf("%ld\n", (long)pq_get_min(pq)); /* 20 */
+
+  pq_free(pq);
+}
+```
+
+### Preprocessor
+
+```c
+#include "edsa.h"
+
+int main(void) {
+  /* Detect the C standard version at compile time */
+  printf("C version: %d\n", PREPROCESSOR_C_VERSION);
+
+  /* Count the number of variadic arguments (C99+) */
+  printf("%d\n", PREPROCESSOR_EXPANSIONS_NUMBER_OF_ELEMENTS(a, b, c)); /* 3 */
 }
 ```
 
