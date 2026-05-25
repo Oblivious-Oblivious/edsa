@@ -8,14 +8,15 @@ EdsaLinkedList *linked_list_dup(EdsaLinkedList *list) {
     return NULL;
   }
 
-  /* Use the address to take advantage of a pointer to pointer approach */
   probe = &(list->head);
   dup   = linked_list_new();
+  if(dup == NULL) {
+    return NULL;
+  }
 
   while(*probe) {
     linked_list_add(dup, (*probe)->item);
 
-    /* Move to the next item */
     probe = (struct EdsaLLNode **)&(*probe)->next;
   }
 

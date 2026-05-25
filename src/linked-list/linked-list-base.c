@@ -2,9 +2,14 @@
 
 EdsaLinkedList *linked_list_new(void) {
   EdsaLinkedList *list = (EdsaLinkedList *)malloc(sizeof(EdsaLinkedList));
-  list->head           = NULL;
-  list->length         = 0;
-  return list;
+
+  if(list == NULL) {
+    return NULL;
+  } else {
+    list->head   = NULL;
+    list->length = 0;
+    return list;
+  }
 }
 
 void linked_list_add(EdsaLinkedList *list, void *item) {
@@ -18,9 +23,10 @@ void linked_list_add(EdsaLinkedList *list, void *item) {
   /* Use the address to take advantage of a pointer to pointer approach */
   probe = &(list->head);
 
-  /* Create a new node */
-  newnode       = (struct EdsaLLNode *)malloc(sizeof(struct EdsaLLNode));
-  newnode->item = (void *)malloc(sizeof(item));
+  newnode = (struct EdsaLLNode *)malloc(sizeof(struct EdsaLLNode));
+  if(newnode == NULL) {
+    return;
+  }
   newnode->item = item;
 
   /* Traverse to the end of the linked list */
@@ -33,9 +39,9 @@ void linked_list_add(EdsaLinkedList *list, void *item) {
   list->length++;
 }
 
-/* TODO -> FIX MEMORY WHEN REMOVING */
 void linked_list_remove(EdsaLinkedList *list, void *item) {
   struct EdsaLLNode **probe = NULL;
+  struct EdsaLLNode *old    = NULL;
 
   if(list == NULL || item == NULL) {
     return;
@@ -43,11 +49,16 @@ void linked_list_remove(EdsaLinkedList *list, void *item) {
 
   probe = &(list->head);
 
-  while((*probe) && (*probe)->item != list) {
+  while((*probe) && (*probe)->item != item) {
     probe = (struct EdsaLLNode **)&(*probe)->next;
   }
 
-  *probe = (struct EdsaLLNode *)((*probe)->next);
+  if(*probe) {
+    old    = *probe;
+    *probe = (struct EdsaLLNode *)((*probe)->next);
+    free(old);
+    list->length--;
+  }
 }
 
 void linked_list_free(EdsaLinkedList *list) {
@@ -68,4 +79,5 @@ void linked_list_free(EdsaLinkedList *list) {
 
   list->head   = NULL;
   list->length = 0;
+  free(list);
 }
