@@ -22,16 +22,21 @@ char **string_split(char *self, const char delimeter) {
   } else {
     size_t i;
     string_free(empty);
+    tmp = string_new("");
     for(i = 0; i < string_size(self); i++) {
       if(self[i] == delimeter) {
-        vector_add(str_tokens, string_new(tmp));
-        string_free(tmp);
+        vector_add(str_tokens, tmp);
+        tmp = string_new("");
       } else {
         string_addf(&tmp, "%c", self[i]);
       }
     }
 
-    vector_add(str_tokens, tmp);
+    if(tmp != NULL && string_size(tmp) > 0) {
+      vector_add(str_tokens, tmp);
+    } else {
+      string_free(tmp);
+    }
   }
 
   return str_tokens;
@@ -39,6 +44,10 @@ char **string_split(char *self, const char delimeter) {
 
 char *
 string_substring(char *self, ptrdiff_t from_position, ptrdiff_t to_position) {
+  if(self == NULL) {
+    return NULL;
+  }
+
   char *strdup = string_dup(self);
 
   if(to_position < 0) {
@@ -61,6 +70,7 @@ char *string_remove_underscores(char *self) {
   for(i = 0; i < string_size(self); i++) {
     if(self[i] == '_') {
       string_remove(self, i);
+      i--;
     }
   }
   return self;

@@ -10,11 +10,19 @@ char *string_new(const char *initial_string) {
 }
 
 void string_add_(char **self, const char *other) {
-  string_addn(*self, other, strlen((other)));
+  if(other == NULL) {
+    return;
+  } else {
+    string_addn(*self, other, strlen(other));
+  }
 }
 
 void string_addi_(char **self, const char *other) {
-  string_addn(*self, other, string_size(other));
+  if(other == NULL) {
+    return;
+  } else {
+    string_addn(*self, other, string_size(other));
+  }
 }
 
 void string_addf(char **self, const char *f, ...) {
@@ -61,21 +69,39 @@ void string_skip_first(char *self, size_t len) {
 }
 
 void string_ignore_last(char *self, size_t len) {
-  string_shorten(self, string_size(self) - len);
+  if(self == NULL) {
+    return;
+  }
+  if((ptrdiff_t)len < 0) {
+    return;
+  }
+  if(len >= string_size(self)) {
+    string_shorten(self, 0);
+  } else {
+    string_shorten(self, string_size(self) - len);
+  }
 }
 
 void string_delete(char *self) { string_shorten(self, 0); }
 
 void string_remove(char *self, size_t pos) {
-  vector_remove(self, pos);
-  self[string_size(self)] = '\0';
+  if(self == NULL || pos >= string_size(self)) {
+    return;
+  } else {
+    vector_remove(self, pos);
+    self[string_size(self)] = '\0';
+  }
 }
 
 bool string_equals(char *self, const char *other) {
-  return (
-    string_size(self) == strlen(other) &&
-    strncmp(self, other, string_size(self)) == 0
-  );
+  if(self == NULL || other == NULL) {
+    return false;
+  } else {
+    return (
+      string_size(self) == strlen(other) &&
+      strncmp(self, other, string_size(self)) == 0
+    );
+  }
 }
 
 void string_free_(char **self) {

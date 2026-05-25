@@ -27,6 +27,9 @@ void string_display(size_t argc, ...) {
 
 char *string_iterate(char *self, EdsaStringLambda apply) {
   size_t i;
+  if(apply == NULL) {
+    return self;
+  }
   for(i = 0; i < string_size(self); i++) {
     apply(self[i]);
   }
@@ -34,7 +37,7 @@ char *string_iterate(char *self, EdsaStringLambda apply) {
 }
 
 char *string_map(char *self, EdsaStringLambda modifier) {
-  if(self == NULL) {
+  if(self == NULL || modifier == NULL) {
     return NULL;
   } else {
     size_t i;

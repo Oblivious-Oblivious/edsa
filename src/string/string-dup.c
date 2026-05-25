@@ -4,6 +4,9 @@
 
 char *string_dup(char *self) {
   char *dup = NULL;
+  if(self == NULL) {
+    return NULL;
+  }
   string_add(dup, self);
   return dup;
 }
