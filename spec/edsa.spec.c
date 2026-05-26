@@ -4,7 +4,9 @@
 #include "file-handler/file-handler.module.spec.h"
 #include "file-handler/read-handler.module.spec.h"
 #include "file-handler/write-handler.module.spec.h"
+#include "hash/fnv1a/fnv1a.module.spec.h"
 #include "hash/komihash/komihash.module.spec.h"
+#include "hash/murmurhash3/murmurhash3.module.spec.h"
 #include "hash/xxh3/xxh3.module.spec.h"
 #include "linked-list/linked-list-base.module.spec.h"
 #include "linked-list/linked-list-dup.module.spec.h"
@@ -36,6 +38,7 @@ int main(void) {
     T_read_handler();
     T_write_handler();
 
+    T_fnv1a();
     T_komihash();
     T_murmurhash3();
     T_xxh3();
