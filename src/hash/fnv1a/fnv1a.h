@@ -13,7 +13,7 @@
  * @return size_t hash
  */
 #if PREPROCESSOR_32_BIT
-static size_t fnv1a_hash(const void *key, size_t size) {
+static size_t hash_fnv1a(const void *key, size_t size) {
   const unsigned char *bp = (const unsigned char *)key;
   const unsigned char *be = bp + size;
   uint32_t hash           = (uint32_t)0x811c9dc5;
@@ -26,7 +26,7 @@ static size_t fnv1a_hash(const void *key, size_t size) {
   return (size_t)hash;
 }
 #else
-static size_t fnv1a_hash(const void *key, size_t size) {
+static size_t hash_fnv1a(const void *key, size_t size) {
   const unsigned char *bp = (const unsigned char *)key;
   const unsigned char *be = bp + size;
   uint64_t hash           = (uint64_t)0xcbf29ce484222325ULL;

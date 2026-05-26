@@ -26,7 +26,7 @@
 #endif
 
 #ifndef TABLE_HASH_FUNCTION
-  #define TABLE_HASH_FUNCTION komihash_hash
+  #define TABLE_HASH_FUNCTION hash_komihash
 #endif
 
 /**

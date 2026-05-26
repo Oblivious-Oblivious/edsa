@@ -13,9 +13,9 @@
 #include "xxh3_implementation.h"
 
 #if PREPROCESSOR_32_BIT
-  #define xxh3_hash(key, size) ((size_t)XXH32((key), (size), 0))
+  #define hash_xxh3(key, size) ((size_t)XXH32((key), (size), 0))
 #else
-  #define xxh3_hash(key, size) ((size_t)XXH3_64bits((key), (size)))
+  #define hash_xxh3(key, size) ((size_t)XXH3_64bits((key), (size)))
 #endif
 
 #endif

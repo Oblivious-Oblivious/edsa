@@ -11,10 +11,10 @@
  * @return size_t hash
  */
 #if PREPROCESSOR_32_BIT
-  #define komihash_hash(key, size) \
+  #define hash_komihash(key, size) \
     ((size_t)(komihash((key), (size), 0x0123456789abcdef) & 0xFFFFFFFF))
 #else
-  #define komihash_hash(key, size) \
+  #define hash_komihash(key, size) \
     ((size_t)komihash((key), (size), 0x0123456789abcdef))
 #endif
 
