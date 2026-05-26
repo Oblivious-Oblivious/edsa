@@ -14,11 +14,11 @@
 static size_t fnv1a_hash(const void *key, size_t size) {
   const unsigned char *bp = (const unsigned char *)key;
   const unsigned char *be = bp + size;
-  uint32_t hash           = UINT32_C(0x811c9dc5);
+  uint32_t hash           = (uint32_t)0x811c9dc5;
 
   while(bp < be) {
     hash ^= (uint32_t)*bp++;
-    hash *= UINT32_C(0x01000193);
+    hash *= (uint32_t)0x01000193;
   }
 
   return (size_t)hash;
@@ -27,11 +27,11 @@ static size_t fnv1a_hash(const void *key, size_t size) {
 static size_t fnv1a_hash(const void *key, size_t size) {
   const unsigned char *bp = (const unsigned char *)key;
   const unsigned char *be = bp + size;
-  uint64_t hash           = UINT64_C(0xcbf29ce484222325);
+  uint64_t hash           = (uint64_t)0xcbf29ce484222325ULL;
 
   while(bp < be) {
     hash ^= (uint64_t)*bp++;
-    hash *= UINT64_C(0x100000001b3);
+    hash *= (uint64_t)0x100000001b3ULL;
   }
 
   return (size_t)hash;
