@@ -1,6 +1,8 @@
 #ifndef __EDSA_FNV1A_H_
 #define __EDSA_FNV1A_H_
 
+#include "../../preprocessor/preprocessor.h"
+
 #include <stddef.h> /* size_t */
 #include <stdint.h> /* uint32_t, uint64_t */
 
@@ -10,7 +12,7 @@
  * @param size
  * @return size_t hash
  */
-#if (UINTPTR_MAX == UINT32_MAX)
+#if PREPROCESSOR_32_BIT
 static size_t fnv1a_hash(const void *key, size_t size) {
   const unsigned char *bp = (const unsigned char *)key;
   const unsigned char *be = bp + size;

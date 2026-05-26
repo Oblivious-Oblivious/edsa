@@ -1,6 +1,7 @@
 #ifndef __EDSA_KOMIHASH_H_
 #define __EDSA_KOMIHASH_H_
 
+#include "../../preprocessor/preprocessor.h"
 #include "komihash_implementation.h"
 
 /**
@@ -9,7 +10,7 @@
  * @param size
  * @return size_t hash
  */
-#if (UINTPTR_MAX == UINT32_MAX)
+#if PREPROCESSOR_32_BIT
   #define komihash_hash(key, size) \
     ((size_t)(komihash((key), (size), 0x0123456789abcdef) & 0xFFFFFFFF))
 #else

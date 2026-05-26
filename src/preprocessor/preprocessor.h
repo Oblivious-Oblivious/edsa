@@ -79,6 +79,12 @@
   #define p_inline static
 #endif
 
+#if defined(UINTPTR_MAX) && defined(UINT32_MAX) && (UINTPTR_MAX == UINT32_MAX)
+  #define PREPROCESSOR_32_BIT 1
+#else
+  #define PREPROCESSOR_32_BIT 0
+#endif
+
 #if PREPROCESSOR_C_VERSION >= 1999
   #define PREPROCESSOR_EXPANSION_4096TH_ARG( \
     _1,                                      \
