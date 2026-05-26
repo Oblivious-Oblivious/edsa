@@ -112,10 +112,12 @@ void *pq_get_min(EdsaMinPQBinaryHeap *self) {
 }
 
 void *pq_delete_min(EdsaMinPQBinaryHeap *self) {
+  void *minm = NULL;
   if(pq_is_empty(self)) {
     return NULL;
   }
-  void *minm = self->A[1];
+
+  minm       = self->A[1];
   self->A[1] = self->A[self->size];
   self->size--;
   pq_min_heapify(self, 1);
@@ -156,10 +158,12 @@ void pq_print(EdsaMinPQBinaryHeap *self) {
 }
 
 void pq_reset(EdsaMinPQBinaryHeap *self) {
+  size_t saved_size;
   if(self == NULL) {
     return;
   }
-  size_t saved_size = self->max_size;
+
+  saved_size = self->max_size;
   free(self->A);
   self->A = (void **)malloc(sizeof(void *) * (saved_size + 1));
   if(self->A == NULL) {
