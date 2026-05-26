@@ -1,8 +1,8 @@
 #ifndef __EDSA_KOMIHASH_MODULE_SPEC_H_
 #define __EDSA_KOMIHASH_MODULE_SPEC_H_
 
-#include "../../../../libs/cSpec/export/cSpec.h"
-#include "../../../../src/table/hash/komihash/komihash.h"
+#include "../../../libs/cSpec/export/cSpec.h"
+#include "../../../src/hash/komihash/komihash.h"
 
 module(T_komihash, {
   describe("#komihash", {

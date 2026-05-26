@@ -1,8 +1,8 @@
 #ifndef __EDSA_XXH3_MODULE_SPEC_H_
 #define __EDSA_XXH3_MODULE_SPEC_H_
 
-#include "../../../../libs/cSpec/export/cSpec.h"
-#include "../../../../src/table/hash/xxh3/xxh3.h"
+#include "../../../libs/cSpec/export/cSpec.h"
+#include "../../../src/hash/xxh3/xxh3.h"
 
 module(T_xxh3, {
   describe("#xxh3", {

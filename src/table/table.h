@@ -2,8 +2,8 @@
 #define __EDSA_TABLE_H_
 
 #include "../boolean/boolean.h"
+#include "../hash/komihash/komihash.h"
 #include "../vector/vector.h"
-#include "hash/komihash/komihash.h"
 
 #define TABLE_STATE_EMPTY   (0)
 #define TABLE_STATE_FILLED  (1)

@@ -39,7 +39,7 @@
 #ifndef KOMIHASH_INCLUDED
 #define KOMIHASH_INCLUDED
 
-#include "../../../preprocessor/preprocessor.h"
+#include "../../preprocessor/preprocessor.h"
 
 #include <stdint.h>
 #include <string.h>

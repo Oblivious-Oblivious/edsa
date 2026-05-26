@@ -4,6 +4,8 @@
 #include "file-handler/file-handler.module.spec.h"
 #include "file-handler/read-handler.module.spec.h"
 #include "file-handler/write-handler.module.spec.h"
+#include "hash/komihash/komihash.module.spec.h"
+#include "hash/xxh3/xxh3.module.spec.h"
 #include "linked-list/linked-list-base.module.spec.h"
 #include "linked-list/linked-list-dup.module.spec.h"
 #include "linked-list/linked-list-functional-functions.module.spec.h"
@@ -18,8 +20,6 @@
 #include "string/string-split.module.spec.h"
 #include "string/string-substring.module.spec.h"
 #include "table/benchmarks/table-general-benchmark.spec.h"
-#include "table/hash/komihash/komihash.module.spec.h"
-#include "table/hash/xxh3/xxh3.module.spec.h"
 #include "table/table.module.spec.h"
 #include "vector/vector-base.module.spec.h"
 #include "vector/vector-dup.module.spec.h"
@@ -35,6 +35,9 @@ int main(void) {
     T_file_handler();
     T_read_handler();
     T_write_handler();
+
+    T_komihash();
+    T_xxh3();
 
     T_linked_list_base();
     T_linked_list_dup();
@@ -55,8 +58,6 @@ int main(void) {
     T_string_substring();
 
     T_table_general_benchmark();
-    T_komihash();
-    T_xxh3();
     T_table();
 
     T_vector_base();

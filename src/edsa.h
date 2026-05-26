@@ -31,6 +31,8 @@
 #include "boolean/boolean.h"
 #include "fast-stack/fast-stack.h"
 #include "file-handler/file-handler.h"
+#include "hash/komihash/komihash.h"
+#include "hash/xxh3/xxh3.h"
 #include "linked-list/linked-list.h"
 #include "min-pq-binary-heap/min-pq-binary-heap.h"
 #include "preprocessor/preprocessor.h"
