@@ -37,6 +37,7 @@ int main(void) {
     T_write_handler();
 
     T_komihash();
+    T_murmurhash3();
     T_xxh3();
 
     T_linked_list_base();
