@@ -4,9 +4,7 @@
 #include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/linked-list/linked-list.h"
 
-static void *ll_double_value(void *item) {
-  return (void *)((long)item * 2);
-}
+static void *ll_double_value(void *item) { return (void *)((long)item * 2); }
 
 static void *ll_filter_greater_than_2(void *item) {
   return (void *)(long)((long)item > 2);
@@ -47,9 +45,9 @@ module(T_linked_list_functional_functions, {
         linked_list_add(l, (void *)3);
         EdsaLinkedList *result = linked_list_map(l, ll_double_value);
         assert_that_size_t(result->length equals to 3);
-        assert_that(result->head->item is (void *)2);
-        assert_that(result->head->next->item is (void *)4);
-        assert_that(result->head->next->next->item is (void *)6);
+        assert_that(result->head->item is(void *) 2);
+        assert_that(result->head->next->item is(void *) 4);
+        assert_that(result->head->next->next->item is(void *) 6);
         linked_list_free(l);
         linked_list_free(result);
       });
@@ -57,7 +55,8 @@ module(T_linked_list_functional_functions, {
 
     context("#linked_list_filter", {
       it("returns NULL when filtering a NULL list", {
-        EdsaLinkedList *result = linked_list_filter(NULL, ll_filter_greater_than_2);
+        EdsaLinkedList *result =
+          linked_list_filter(NULL, ll_filter_greater_than_2);
         assert_that(result is NULL);
       });
 
@@ -77,8 +76,8 @@ module(T_linked_list_functional_functions, {
         EdsaLinkedList *result =
           linked_list_filter(l, ll_filter_greater_than_2);
         assert_that_size_t(result->length equals to 2);
-        assert_that(result->head->item is (void *)1);
-        assert_that(result->head->next->item is (void *)2);
+        assert_that(result->head->item is(void *) 1);
+        assert_that(result->head->next->item is(void *) 2);
         linked_list_free(l);
         linked_list_free(result);
       });
@@ -108,7 +107,7 @@ module(T_linked_list_functional_functions, {
         EdsaLinkedList *l = linked_list_new();
         linked_list_add(l, (void *)42);
         void *result = linked_list_reduce(l, ll_sum);
-        assert_that(result is (void *)42);
+        assert_that(result is(void *) 42);
         linked_list_free(l);
       });
 
@@ -119,7 +118,7 @@ module(T_linked_list_functional_functions, {
         linked_list_add(l, (void *)3);
         linked_list_add(l, (void *)4);
         void *result = linked_list_reduce(l, ll_sum);
-        assert_that(result is (void *)10);
+        assert_that(result is(void *) 10);
         linked_list_free(l);
       });
     });

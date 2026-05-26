@@ -34,7 +34,7 @@ module(T_min_pq_binary_heap_base, {
       pq_insert(pq, (void *)10);
       pq_insert(pq, (void *)20);
       assert_that_size_t(pq->size equals to 3);
-      assert_that(pq_get_min(pq) is (void *)10);
+      assert_that(pq_get_min(pq) is(void *) 10);
       pq_free(pq);
     });
 
@@ -44,9 +44,9 @@ module(T_min_pq_binary_heap_base, {
       pq_insert(pq, (void *)10);
       pq_insert(pq, (void *)20);
       void *min = pq_delete_min(pq);
-      assert_that(min is (void *)10);
+      assert_that(min is(void *) 10);
       assert_that_size_t(pq->size equals to 2);
-      assert_that(pq_get_min(pq) is (void *)20);
+      assert_that(pq_get_min(pq) is(void *) 20);
       pq_free(pq);
     });
 
@@ -64,7 +64,7 @@ module(T_min_pq_binary_heap_base, {
       pq_insert(pq, (void *)4);
       pq_insert(pq, (void *)5);
       assert_that_size_t(pq->size equals to 5);
-      assert_that(pq_get_min(pq) is (void *)1);
+      assert_that(pq_get_min(pq) is(void *) 1);
       pq_free(pq);
     });
 
@@ -75,11 +75,11 @@ module(T_min_pq_binary_heap_base, {
       pq_insert(pq, (void *)40);
       pq_insert(pq, (void *)20);
       pq_insert(pq, (void *)30);
-      assert_that(pq_delete_min(pq) is (void *)10);
-      assert_that(pq_delete_min(pq) is (void *)20);
-      assert_that(pq_delete_min(pq) is (void *)30);
-      assert_that(pq_delete_min(pq) is (void *)40);
-      assert_that(pq_delete_min(pq) is (void *)50);
+      assert_that(pq_delete_min(pq) is(void *) 10);
+      assert_that(pq_delete_min(pq) is(void *) 20);
+      assert_that(pq_delete_min(pq) is(void *) 30);
+      assert_that(pq_delete_min(pq) is(void *) 40);
+      assert_that(pq_delete_min(pq) is(void *) 50);
       assert_that(pq_is_empty(pq));
       pq_free(pq);
     });
@@ -99,7 +99,7 @@ module(T_min_pq_binary_heap_base, {
       pq_insert(pq, (void *)5);
       pq_reset(pq);
       pq_insert(pq, (void *)42);
-      assert_that(pq_get_min(pq) is (void *)42);
+      assert_that(pq_get_min(pq) is(void *) 42);
       pq_free(pq);
     });
 

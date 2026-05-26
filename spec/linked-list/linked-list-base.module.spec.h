@@ -21,9 +21,9 @@ module(T_linked_list_base, {
       linked_list_add(l, (void *)3);
       assert_that_size_t(l->length equals to 3);
       assert_that(l->head isnot NULL);
-      assert_that(l->head->item is (void *)1);
-      assert_that(l->head->next->item is (void *)2);
-      assert_that(l->head->next->next->item is (void *)3);
+      assert_that(l->head->item is(void *) 1);
+      assert_that(l->head->next->item is(void *) 2);
+      assert_that(l->head->next->next->item is(void *) 3);
       assert_that(l->head->next->next->next is NULL);
       linked_list_free(l);
     });
@@ -36,9 +36,7 @@ module(T_linked_list_base, {
       linked_list_free(l);
     });
 
-    it("does not add to a NULL list", {
-      linked_list_add(NULL, (void *)1);
-    });
+    it("does not add to a NULL list", { linked_list_add(NULL, (void *)1); });
 
     it("removes an element from the linked list", {
       EdsaLinkedList *l = linked_list_new();
@@ -47,8 +45,8 @@ module(T_linked_list_base, {
       linked_list_add(l, (void *)3);
       linked_list_remove(l, (void *)2);
       assert_that_size_t(l->length equals to 2);
-      assert_that(l->head->item is (void *)1);
-      assert_that(l->head->next->item is (void *)3);
+      assert_that(l->head->item is(void *) 1);
+      assert_that(l->head->next->item is(void *) 3);
       linked_list_free(l);
     });
 
@@ -58,7 +56,7 @@ module(T_linked_list_base, {
       linked_list_add(l, (void *)2);
       linked_list_remove(l, (void *)1);
       assert_that_size_t(l->length equals to 1);
-      assert_that(l->head->item is (void *)2);
+      assert_that(l->head->item is(void *) 2);
       linked_list_free(l);
     });
 
@@ -68,7 +66,7 @@ module(T_linked_list_base, {
       linked_list_add(l, (void *)2);
       linked_list_remove(l, (void *)2);
       assert_that_size_t(l->length equals to 1);
-      assert_that(l->head->item is (void *)1);
+      assert_that(l->head->item is(void *) 1);
       assert_that(l->head->next is NULL);
       linked_list_free(l);
     });

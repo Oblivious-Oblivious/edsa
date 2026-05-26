@@ -29,9 +29,9 @@ module(T_linked_list_dup, {
       EdsaLinkedList *dup = linked_list_dup(l);
       assert_that(dup isnot NULL);
       assert_that_size_t(dup->length equals to 3);
-      assert_that(dup->head->item is (void *)10);
-      assert_that(dup->head->next->item is (void *)20);
-      assert_that(dup->head->next->next->item is (void *)30);
+      assert_that(dup->head->item is(void *) 10);
+      assert_that(dup->head->next->item is(void *) 20);
+      assert_that(dup->head->next->next->item is(void *) 30);
       linked_list_free(l);
       linked_list_free(dup);
     });
