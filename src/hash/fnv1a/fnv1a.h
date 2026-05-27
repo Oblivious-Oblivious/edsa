@@ -12,7 +12,7 @@
  * @param size
  * @return size_t hash
  */
-#if PREPROCESSOR_32_BIT
+#if PREPROCESSOR_32_BIT || PREPROCESSOR_C_VERSION < 1999
 p_inline size_t hash_fnv1a(const void *key, size_t size) {
   const unsigned char *bp = (const unsigned char *)key;
   const unsigned char *be = bp + size;

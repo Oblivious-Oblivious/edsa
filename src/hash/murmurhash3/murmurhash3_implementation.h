@@ -13,9 +13,11 @@ p_inline uint32_t MURMURHASH3_ROTL32(uint32_t x, int8_t r) {
   return (x << r) | (x >> (32 - r));
 }
 
+#if !(PREPROCESSOR_32_BIT || PREPROCESSOR_C_VERSION < 1999)
 p_inline uint64_t MURMURHASH3_ROTL64(uint64_t x, int8_t r) {
   return (x << r) | (x >> (64 - r));
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // Finalization mix - force all bits of a hash block to avalanche
@@ -32,6 +34,7 @@ p_inline uint32_t murmurhash3_fmix32(uint32_t h) {
 
 //----------
 
+#if !(PREPROCESSOR_32_BIT || PREPROCESSOR_C_VERSION < 1999)
 p_inline uint64_t murmurhash3_fmix64(uint64_t k) {
   k ^= k >> 33;
   k *= 0xff51afd7ed558ccdLLU;
@@ -41,6 +44,7 @@ p_inline uint64_t murmurhash3_fmix64(uint64_t k) {
 
   return k;
 }
+#endif
 
 p_inline void
 MurmurHash3_x86_128(const void *key, int len, uint32_t seed, void *out) {
@@ -201,6 +205,7 @@ MurmurHash3_x86_128(const void *key, int len, uint32_t seed, void *out) {
   ((uint32_t *)out)[3] = h4;
 }
 
+#if !(PREPROCESSOR_32_BIT || PREPROCESSOR_C_VERSION < 1999)
 p_inline void
 MurmurHash3_x64_128(const void *key, int len, uint32_t seed, void *out) {
   const uint8_t *data = (const uint8_t *)key;
@@ -309,5 +314,6 @@ MurmurHash3_x64_128(const void *key, int len, uint32_t seed, void *out) {
   ((uint64_t *)out)[0] = h1;
   ((uint64_t *)out)[1] = h2;
 }
+#endif
 
 #endif
