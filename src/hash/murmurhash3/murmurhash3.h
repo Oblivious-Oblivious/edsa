@@ -13,13 +13,13 @@
  * @return size_t hash
  */
 #if PREPROCESSOR_32_BIT
-static inline size_t hash_murmurhash3(const void *key, int size) {
+p_inline size_t hash_murmurhash3(const void *key, int size) {
   uint32_t hash[4];
   MurmurHash3_x86_128(key, size, 0, hash);
   return (size_t)hash[0];
 }
 #else
-static inline size_t hash_murmurhash3(const void *key, int size) {
+p_inline size_t hash_murmurhash3(const void *key, int size) {
   uint64_t hash[2];
   MurmurHash3_x64_128(key, size, 0, hash);
   return (size_t)hash[0];
