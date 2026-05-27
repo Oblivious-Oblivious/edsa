@@ -1,5 +1,5 @@
-#ifndef __EDSA_KOMIHASH_32_MODULE_SPEC_H_
-#define __EDSA_KOMIHASH_32_MODULE_SPEC_H_
+#ifndef __EDSA_HASH_KOMIHASH_32_MODULE_SPEC_H_
+#define __EDSA_HASH_KOMIHASH_32_MODULE_SPEC_H_
 
 #include "../../../libs/cSpec/export/cSpec.h"
 #include "../../../src/hash/komihash/komihash.h"

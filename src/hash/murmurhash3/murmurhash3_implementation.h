@@ -2,8 +2,8 @@
 // public domain. The author hereby disclaims copyright to this source
 // code.
 
-#ifndef __EDSA_MURMURHASH3_IMPLEMENTATION_H_
-#define __EDSA_MURMURHASH3_IMPLEMENTATION_H_
+#ifndef __EDSA_HASH_MURMURHASH3_IMPLEMENTATION_H_
+#define __EDSA_HASH_MURMURHASH3_IMPLEMENTATION_H_
 
 #include "../../preprocessor/preprocessor.h"
 

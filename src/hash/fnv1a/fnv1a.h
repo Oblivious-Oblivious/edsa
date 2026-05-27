@@ -1,5 +1,5 @@
-#ifndef __EDSA_FNV1A_H_
-#define __EDSA_FNV1A_H_
+#ifndef __EDSA_HASH_FNV1A_H_
+#define __EDSA_HASH_FNV1A_H_
 
 #include "../../preprocessor/preprocessor.h"
 

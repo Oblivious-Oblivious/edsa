@@ -3913,7 +3913,7 @@ enum XXH_VECTOR_TYPE /* fake enum */ {
 #    define XXH_VECTOR XXH_SSE2
 #  elif (defined(__PPC64__) && defined(__POWER8_VECTOR__)) \
      || (defined(__s390x__) && defined(__VEC__)) \
-     && defined(__GNUC__) /* TODO: IBM XL */
+     && defined(__GNUC__)
 #    define XXH_VECTOR XXH_VSX
 #  else
 #    define XXH_VECTOR XXH_SCALAR

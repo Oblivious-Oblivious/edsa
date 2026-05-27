@@ -36,8 +36,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef KOMIHASH_INCLUDED
-#define KOMIHASH_INCLUDED
+#ifndef __HASH_KOMIHASH_IMPLEMENTATION_H_
+#define __HASH_KOMIHASH_IMPLEMENTATION_H_
 
 #include "../../preprocessor/preprocessor.h"
 
@@ -692,4 +692,4 @@ komihash(const void *const Msg0, size_t MsgLen, const uint64_t UseSeed) {
 
 #endif /* !defined( KOMIHASH_BUFSIZE ) */
 
-#endif /* KOMIHASH_INCLUDED */
+#endif /* __HASH_KOMIHASH_IMPLEMENTATION_H_ */

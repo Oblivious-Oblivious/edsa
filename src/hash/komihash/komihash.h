@@ -1,5 +1,5 @@
-#ifndef __EDSA_KOMIHASH_H_
-#define __EDSA_KOMIHASH_H_
+#ifndef __EDSA_HASH_KOMIHASH_H_
+#define __EDSA_HASH_KOMIHASH_H_
 
 #include "../../preprocessor/preprocessor.h"
 #include "komihash_implementation.h"

@@ -1,5 +1,5 @@
-#ifndef __EDSA_FNV1A_MODULE_SPEC_H_
-#define __EDSA_FNV1A_MODULE_SPEC_H_
+#ifndef __EDSA_HASH_FNV1A_MODULE_SPEC_H_
+#define __EDSA_HASH_FNV1A_MODULE_SPEC_H_
 
 #include "../../../libs/cSpec/export/cSpec.h"
 #include "../../../src/hash/fnv1a/fnv1a.h"

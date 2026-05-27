@@ -1,5 +1,5 @@
-#ifndef __EDSA_XXH3_H_
-#define __EDSA_XXH3_H_
+#ifndef __EDSA_HASH_XXH3_H_
+#define __EDSA_HASH_XXH3_H_
 
 #include "../../preprocessor/preprocessor.h"
 
