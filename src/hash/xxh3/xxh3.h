@@ -9,7 +9,7 @@
  * @return size_t hash
  */
 #define XXH_STATIC_LINKING_ONLY
-#define XXH_IMPLEMENTATION
+#define XXH_INLINE_ALL
 #include "xxh3_implementation.h"
 
 #if PREPROCESSOR_32_BIT

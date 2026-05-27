@@ -42,7 +42,8 @@ p_inline uint64_t murmurhash3_fmix64(uint64_t k) {
   return k;
 }
 
-void MurmurHash3_x86_128(const void *key, int len, uint32_t seed, void *out) {
+p_inline void
+MurmurHash3_x86_128(const void *key, int len, uint32_t seed, void *out) {
   const uint8_t *data = (const uint8_t *)key;
   const int nblocks   = len / 16;
   int i;
@@ -200,7 +201,8 @@ void MurmurHash3_x86_128(const void *key, int len, uint32_t seed, void *out) {
   ((uint32_t *)out)[3] = h4;
 }
 
-void MurmurHash3_x64_128(const void *key, int len, uint32_t seed, void *out) {
+p_inline void
+MurmurHash3_x64_128(const void *key, int len, uint32_t seed, void *out) {
   const uint8_t *data = (const uint8_t *)key;
   const int nblocks   = len / 16;
   int i;
