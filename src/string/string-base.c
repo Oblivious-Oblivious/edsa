@@ -27,7 +27,6 @@ void string_addi_(char **self, const char *other) {
 
 void string_addf(char **self, const char *f, ...) {
   signed int result = 0;
-  /* TODO - Bounds checks */
   char buf[4096];
   va_list args;
 

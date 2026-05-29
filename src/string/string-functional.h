@@ -9,7 +9,6 @@
       PREPROCESSOR_EXPANSIONS_NUMBER_OF_ELEMENTS(__VA_ARGS__), __VA_ARGS__ \
     )
 
-/* TODO - Actual conversion to a string */
 /**
  * @brief Used for string interpolation
  * @param argc -> The number of the arguments provided by the macros

@@ -60,9 +60,6 @@ typedef struct {
      ? (_vector_grow(self, n), 0)                                              \
      : 0)
 
-/* TODO - Add an allocator struct that can be generic for use */
-/* TODO - Potentially adding a GC in the custom allocator */
-/** @brief Custom allocator.  Can be overridden by user before including */
 #ifndef vector_allocator
   #define vector_allocator realloc
 #endif
