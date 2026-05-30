@@ -1,6 +1,5 @@
-// MurmurHash3 was written by Austin Appleby, and is placed in the
-// public domain. The author hereby disclaims copyright to this source
-// code.
+/* MurmurHash3 was written by Austin Appleby, and is placed in the public
+ * domain. The author hereby disclaims copyright to this source code. */
 
 #ifndef __EDSA_HASH_MURMURHASH3_IMPLEMENTATION_H_
 #define __EDSA_HASH_MURMURHASH3_IMPLEMENTATION_H_
@@ -19,8 +18,8 @@ p_inline uint64_t MURMURHASH3_ROTL64(uint64_t x, int8_t r) {
 }
 #endif
 
-//-----------------------------------------------------------------------------
-// Finalization mix - force all bits of a hash block to avalanche
+/* -----------------------------------------------------------------------------
+ * Finalization mix - force all bits of a hash block to avalanche */
 
 p_inline uint32_t murmurhash3_fmix32(uint32_t h) {
   h ^= h >> 16;
@@ -62,8 +61,8 @@ MurmurHash3_x86_128(const void *key, int len, uint32_t seed, void *out) {
   uint32_t c3 = 0x38b34ae5;
   uint32_t c4 = 0xa1e38b93;
 
-  //----------
-  // body
+  /* ----------
+   * body */
 
   const uint32_t *blocks = (const uint32_t *)(data + nblocks * 16);
 
@@ -110,8 +109,8 @@ MurmurHash3_x86_128(const void *key, int len, uint32_t seed, void *out) {
     h4 = h4 * 5 + 0x32ac3b17;
   }
 
-  //----------
-  // tail
+  /* ----------
+   * tail */
 
   const uint8_t *tail = (const uint8_t *)(data + nblocks * 16);
 
@@ -172,8 +171,8 @@ MurmurHash3_x86_128(const void *key, int len, uint32_t seed, void *out) {
     h1 ^= k1;
   };
 
-  //----------
-  // finalization
+  /* ----------
+   * finalization */
 
   h1 ^= len;
   h2 ^= len;
@@ -218,8 +217,8 @@ MurmurHash3_x64_128(const void *key, int len, uint32_t seed, void *out) {
   uint64_t c1 = 0x87c37b91114253d5LLU;
   uint64_t c2 = 0x4cf5ad432745937fLLU;
 
-  //----------
-  // body
+  /* ----------
+   * body */
 
   const uint64_t *blocks = (const uint64_t *)(data);
 
@@ -246,8 +245,8 @@ MurmurHash3_x64_128(const void *key, int len, uint32_t seed, void *out) {
     h2 = h2 * 5 + 0x38495ab5;
   }
 
-  //----------
-  // tail
+  /* ----------
+   * tail */
 
   const uint8_t *tail = (const uint8_t *)(data + nblocks * 16);
 
@@ -296,8 +295,8 @@ MurmurHash3_x64_128(const void *key, int len, uint32_t seed, void *out) {
     h1 ^= k1;
   };
 
-  //----------
-  // finalization
+  /* ----------
+   * finalization */
 
   h1 ^= len;
   h2 ^= len;
