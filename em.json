@@ -68,6 +68,6 @@
   },
   "dependencies": {},
   "dev-dependencies": {
-    "cSpec": "Oblivious-Oblivious/cSpec"
+    "https://github.com/Oblivious-Oblivious/cSpec": "latest"
   }
 }
