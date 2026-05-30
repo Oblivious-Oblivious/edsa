@@ -1,5 +1,6 @@
 #include "../libs/cSpec/export/cSpec.h"
 #include "../src/preprocessor/preprocessor.h"
+#include "allocator/arena.module.spec.h"
 #include "boolean/boolean.module.spec.h"
 #include "fast-stack/fast-stack.module.spec.h"
 #include "file-handler/file-handler.module.spec.h"
@@ -38,6 +39,8 @@
 
 int main(void) {
   cspec_run_suite("all", {
+    T_allocator_arena();
+
     T_boolean();
 
     T_fast_stack();
