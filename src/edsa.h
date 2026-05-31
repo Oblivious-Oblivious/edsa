@@ -29,6 +29,8 @@
 #define __EDSA_H_
 
 #include "allocator/arena.h"
+#include "allocator/pool.h"
+#include "allocator/utils.h"
 #include "boolean/boolean.h"
 #include "fast-stack/fast-stack.h"
 #include "file-handler/file-handler.h"

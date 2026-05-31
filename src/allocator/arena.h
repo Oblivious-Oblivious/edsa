@@ -19,10 +19,6 @@ typedef struct AllocatorArena {
   size_t curr_offset;
 } AllocatorArena;
 
-#ifndef ALLOCATOR_ARENA_DEFAULT_ALIGNMENT
-  #define ALLOCATOR_ARENA_DEFAULT_ALIGNMENT (2 * sizeof(void *))
-#endif
-
 /**
  * @brief Typical initialization, no malloc used.
  * @param a -> arena

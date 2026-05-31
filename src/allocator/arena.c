@@ -2,29 +2,10 @@
 
 #include "../boolean/boolean.h"
 #include "../preprocessor/preprocessor.h"
+#include "utils.h"
 
 #include <assert.h> /* assert */
 #include <string.h> /* memset */
-
-p_inline bool is_power_of_two(ptrdiff_t x) { return (x & (x - 1)) == 0; }
-
-p_inline ptrdiff_t align_forward(ptrdiff_t ptr, size_t align) {
-  ptrdiff_t p, a, modulo;
-
-  assert(is_power_of_two(align));
-
-  p      = ptr;
-  a      = (ptrdiff_t)align;
-  modulo = p & (a - 1);
-
-  if(modulo != 0) {
-    /* If 'p' address is not aligned, push the address to the next value which
-     * is aligned */
-    p += a - modulo;
-  }
-
-  return p;
-}
 
 void allocator_arena_init(
   AllocatorArena *a, void *backing_buffer, size_t backing_buffer_len
@@ -40,7 +21,7 @@ void *allocator_arena_resize(
 ) {
   unsigned char *old_mem = (unsigned char *)old_memory;
 
-  assert(is_power_of_two(ALLOCATOR_ARENA_DEFAULT_ALIGNMENT));
+  assert(allocator_is_power_of_two(ALLOCATOR_DEFAULT_ALIGNMENT));
 
   if(old_mem == NULL || old_size == 0) {
     return allocator_arena_alloc(a, new_size);
@@ -68,7 +49,8 @@ void *allocator_arena_resize(
 void *allocator_arena_alloc(AllocatorArena *a, size_t size) {
   /* Align 'curr_offset' forward to the specified alignment */
   ptrdiff_t curr_ptr = (ptrdiff_t)a->buf + (ptrdiff_t)a->curr_offset;
-  ptrdiff_t offset = align_forward(curr_ptr, ALLOCATOR_ARENA_DEFAULT_ALIGNMENT);
+  ptrdiff_t offset =
+    allocator_align_forward(curr_ptr, ALLOCATOR_DEFAULT_ALIGNMENT);
   offset -= (ptrdiff_t)a->buf; /* Change to relative offset */
 
   /* Check to see if the backing memory has space left */

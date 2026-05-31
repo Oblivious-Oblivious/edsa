@@ -3,6 +3,7 @@
 
 #include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/allocator/arena.h"
+#include "../../src/allocator/utils.h"
 
 #include <stdint.h>
 
@@ -53,16 +54,16 @@ module(T_allocator_arena, {
       assert_that(first isnot NULL);
       assert_that(second isnot NULL);
       assert_that_size_t(
-        (uintptr_t)first % ALLOCATOR_ARENA_DEFAULT_ALIGNMENT equals to 0
+        (uintptr_t)first % ALLOCATOR_DEFAULT_ALIGNMENT equals to 0
       );
       assert_that_size_t(
-        (uintptr_t)second % ALLOCATOR_ARENA_DEFAULT_ALIGNMENT equals to 0
+        (uintptr_t)second % ALLOCATOR_DEFAULT_ALIGNMENT equals to 0
       );
       assert_that_size_t(
-        arena.prev_offset equals to ALLOCATOR_ARENA_DEFAULT_ALIGNMENT
+        arena.prev_offset equals to ALLOCATOR_DEFAULT_ALIGNMENT
       );
       assert_that_size_t(
-        arena.curr_offset equals to ALLOCATOR_ARENA_DEFAULT_ALIGNMENT + 1
+        arena.curr_offset equals to ALLOCATOR_DEFAULT_ALIGNMENT + 1
       );
     });
 
