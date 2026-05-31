@@ -1,5 +1,5 @@
 ---AVG KOMIHASH---
-Insertion            ~ 56ns/op
+Insertion            ~ 49ns/op
 Lookup               ~ 42ns/op
 Deletion             ~ 35ns/op
 NonExistent Removal  ~ 63ns/op

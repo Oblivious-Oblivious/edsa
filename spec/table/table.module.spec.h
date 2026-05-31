@@ -3,7 +3,8 @@
 
 #include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/file-handler/file-handler.h"
-#include "../../src/string/estring.h"
+#include "../../src/string/string-base.h"
+#include "../../src/string/string-editing.h"
 #include "../../src/table/table.h"
 #include "../../src/vector/vector.h"
 

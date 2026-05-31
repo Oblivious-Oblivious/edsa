@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/Oblivious-Oblivious/Emeralds/master/schema/em.schema.json",
-  "author": "",
+  "author": "atha",
   "name": "edsa",
   "version": "0.1.0",
   "license": "gpl-v3",
@@ -13,10 +13,53 @@
     "directories": ["libs", "src/hash/xxh3/xxh3_implementation.h"]
   },
   "scripts": {
+    "test-allocator": [
+      "clang -O2 -std=c2x -g -fsanitize=address -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Ilibs/cSpec/export -o spec/spec_results src/allocator/*.c spec.modules/edsa.allocator.spec.c",
+      "./spec/spec_results"
+    ],
+    "test-boolean": [
+      "clang -O2 -std=c2x -g -fsanitize=address -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Ilibs/cSpec/export -o spec/spec_results spec.modules/edsa.boolean.spec.c",
+      "./spec/spec_results"
+    ],
+    "test-fast-stack": [
+      "clang -O2 -std=c2x -g -fsanitize=address -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Ilibs/cSpec/export -o spec/spec_results spec.modules/edsa.fast-stack.spec.c",
+      "./spec/spec_results"
+    ],
+    "test-file-handler": [
+      "clang -O2 -std=c2x -g -fsanitize=address -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Ilibs/cSpec/export -o spec/spec_results src/vector/vector.c src/string/string-base.c src/file-handler/*.c spec.modules/edsa.file-handler.spec.c",
+      "./spec/spec_results"
+    ],
+    "test-hash": [
+      "clang -O2 -std=c2x -g -fsanitize=address -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Ilibs/cSpec/export -o spec/spec_results spec.modules/edsa.hash.spec.c",
+      "./spec/spec_results"
+    ],
+    "test-linked-list": [
+      "clang -O2 -std=c2x -g -fsanitize=address -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Ilibs/cSpec/export -o spec/spec_results src/linked-list/*.c spec.modules/edsa.linked-list.spec.c",
+      "./spec/spec_results"
+    ],
+    "test-min-pq-binary-heap": [
+      "clang -O2 -std=c2x -g -fsanitize=address -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Ilibs/cSpec/export -o spec/spec_results src/min-pq-binary-heap/*.c spec.modules/edsa.min-pq-binary-heap.spec.c",
+      "./spec/spec_results"
+    ],
+    "test-preprocessor": [
+      "clang -O2 -std=c2x -g -fsanitize=address -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Ilibs/cSpec/export -o spec/spec_results spec.modules/edsa.preprocessor.spec.c",
+      "./spec/spec_results"
+    ],
+    "test-stack": [
+      "clang -O2 -std=c2x -g -fsanitize=address -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Ilibs/cSpec/export -o spec/spec_results src/vector/vector.c spec.modules/edsa.stack.spec.c",
+      "./spec/spec_results"
+    ],
+    "test-string": [
+      "clang -O2 -std=c2x -g -fsanitize=address -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Ilibs/cSpec/export -o spec/spec_results src/vector/*.c src/string/*.c spec.modules/edsa.string.spec.c",
+      "./spec/spec_results"
+    ],
     "test-table": [
-      "clang -O3 -ffast-math -std=c2x -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic src/vector/*.c src/string/*.c src/file-handler/*.c src/table/*.c edsa.table.spec.c -o spec_results",
-      "./spec_results",
-      "rm spec_results"
+      "clang -O3 -ffast-math -std=c2x -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -o spec/spec_results src/vector/*.c src/string/*.c src/file-handler/*.c src/table/*.c spec.modules/edsa.table.spec.c",
+      "./spec/spec_results"
+    ],
+    "test-vector": [
+      "clang -O2 -std=c2x -g -fsanitize=address -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Ilibs/cSpec/export -o spec/spec_results src/vector/*.c spec.modules/edsa.vector.spec.c",
+      "./spec/spec_results"
     ]
   },
   "compile-flags": {

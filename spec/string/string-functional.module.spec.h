@@ -2,7 +2,8 @@
 #define __EDSA_STRING_FUNCTIONAL_MODULE_SPEC_H_
 
 #include "../../libs/cSpec/export/cSpec.h"
-#include "../../src/string/estring.h"
+#include "../../src/string/string-base.h"
+#include "../../src/string/string-functional.h"
 
 static char iterator(char c) {
   printf("iterating: %c\n", c);

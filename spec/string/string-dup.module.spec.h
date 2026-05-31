@@ -2,7 +2,8 @@
 #define __EDSA_STRING_DUP_MODULE_SPEC_H_
 
 #include "../../libs/cSpec/export/cSpec.h"
-#include "../../src/string/estring.h"
+#include "../../src/string/string-base.h"
+#include "../../src/string/string-dup.h"
 
 module(T_string_dup, {
   describe("string dup", {

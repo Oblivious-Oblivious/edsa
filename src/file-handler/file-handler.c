@@ -1,5 +1,7 @@
 #include "file-handler.h"
 
+#include "../string/string-base.h"
+
 void file_handler_init(EdsaFileHandler *self) {
   if(self == NULL) {
     return;

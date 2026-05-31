@@ -2,7 +2,7 @@
 #define __EDSA_LINKED_LIST_DUP_MODULE_SPEC_H_
 
 #include "../../libs/cSpec/export/cSpec.h"
-#include "../../src/linked-list/linked-list.h"
+#include "../../src/linked-list/linked-list-dup.h"
 
 module(T_linked_list_dup, {
   describe("linked list dup", {

@@ -2,7 +2,8 @@
 #define __EDSA_STRING_BASE_MODULE_SPEC_H_
 
 #include "../../libs/cSpec/export/cSpec.h"
-#include "../../src/string/estring.h"
+#include "../../src/string/string-base.h"
+#include "../../src/string/string-editing.h"
 
 static void _external_string_add(char **str, const char *value) {
   string_add(*str, value);

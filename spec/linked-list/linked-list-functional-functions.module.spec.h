@@ -2,7 +2,7 @@
 #define __EDSA_LINKED_LIST_FUNCTIONAL_FUNCTIONS_MODULE_SPEC_H_
 
 #include "../../libs/cSpec/export/cSpec.h"
-#include "../../src/linked-list/linked-list.h"
+#include "../../src/linked-list/linked-list-functional-functions.h"
 
 static void *ll_double_value(void *item) { return (void *)((long)item * 2); }
 

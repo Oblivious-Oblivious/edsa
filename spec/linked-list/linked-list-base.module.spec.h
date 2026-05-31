@@ -2,7 +2,7 @@
 #define __EDSA_LINKED_LIST_BASE_MODULE_SPEC_H_
 
 #include "../../libs/cSpec/export/cSpec.h"
-#include "../../src/linked-list/linked-list.h"
+#include "../../src/linked-list/linked-list-base.h"
 
 module(T_linked_list_base, {
   describe("linked list base", {

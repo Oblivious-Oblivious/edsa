@@ -3,6 +3,7 @@
 
 #include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/file-handler/file-handler.h"
+#include "../../src/string/string-base.h"
 
 module(T_write_handler, {
   describe("#write", {
