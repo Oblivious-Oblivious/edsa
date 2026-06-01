@@ -2,6 +2,7 @@
 #include "../src/preprocessor/preprocessor.h"
 #include "allocator/arena.module.spec.h"
 #include "allocator/pool.module.spec.h"
+#include "allocator/rc.module.spec.h"
 #include "allocator/utils.module.spec.h"
 #include "boolean/boolean.module.spec.h"
 #include "fast-stack/fast-stack.module.spec.h"
@@ -43,6 +44,7 @@ int main(void) {
   cspec_run_suite("all", {
     T_allocator_arena();
     T_allocator_pool();
+    T_allocator_rc();
     T_allocator_utils();
 
     T_boolean();

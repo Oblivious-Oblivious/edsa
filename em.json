@@ -14,7 +14,7 @@
   },
   "scripts": {
     "test-allocator": [
-      "clang -O2 -std=c2x -g -fsanitize=address -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Ilibs/cSpec/export -o spec/spec_results src/allocator/*.c spec.modules/edsa.allocator.spec.c",
+      "clang -O2 -std=c2x -g -fsanitize=address -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic -Ilibs/cSpec/export -o spec/spec_results src/vector/vector.c src/string/string-base.c src/allocator/*.c spec.modules/edsa.allocator.spec.c",
       "./spec/spec_results"
     ],
     "test-boolean": [

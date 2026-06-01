@@ -30,6 +30,7 @@
 
 #include "allocator/arena.h"
 #include "allocator/pool.h"
+#include "allocator/rc.h"
 #include "allocator/utils.h"
 #include "boolean/boolean.h"
 #include "fast-stack/fast-stack.h"
