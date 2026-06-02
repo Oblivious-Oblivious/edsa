@@ -1,7 +1,11 @@
 #ifndef __EDSA_LINKED_LIST_BASE_H_
 #define __EDSA_LINKED_LIST_BASE_H_
 
-#include <stdlib.h> /* malloc, calloc, realloc, free */
+#include <stdlib.h> /* realloc */
+
+#ifndef linked_list_allocator
+  #define linked_list_allocator realloc
+#endif
 
 /**
  * @brief: A linked list node with a typed object item

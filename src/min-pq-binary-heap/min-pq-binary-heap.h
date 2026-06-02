@@ -4,7 +4,11 @@
 #include "../boolean/boolean.h"
 
 #include <stdio.h>  /* printf */
-#include <stdlib.h> /* malloc, free */
+#include <stdlib.h> /* realloc */
+
+#ifndef pq_allocator
+  #define pq_allocator realloc
+#endif
 
 typedef struct EdsaMinPQBinaryHeap {
   void **A;

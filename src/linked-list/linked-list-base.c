@@ -1,7 +1,8 @@
 #include "linked-list-base.h"
 
 EdsaLinkedList *linked_list_new(void) {
-  EdsaLinkedList *list = (EdsaLinkedList *)malloc(sizeof(EdsaLinkedList));
+  EdsaLinkedList *list =
+    (EdsaLinkedList *)linked_list_allocator(NULL, sizeof(EdsaLinkedList));
 
   if(list == NULL) {
     return NULL;
@@ -23,7 +24,8 @@ void linked_list_add(EdsaLinkedList *list, void *item) {
   /* Use the address to take advantage of a pointer to pointer approach */
   probe = &(list->head);
 
-  newnode = (struct EdsaLLNode *)malloc(sizeof(struct EdsaLLNode));
+  newnode =
+    (struct EdsaLLNode *)linked_list_allocator(NULL, sizeof(struct EdsaLLNode));
   if(newnode == NULL) {
     return;
   }
@@ -56,7 +58,7 @@ void linked_list_remove(EdsaLinkedList *list, void *item) {
   if(*probe) {
     old    = *probe;
     *probe = (struct EdsaLLNode *)((*probe)->next);
-    free(old);
+    old    = linked_list_allocator(old, 0);
     list->length--;
   }
 }
@@ -72,12 +74,12 @@ void linked_list_free(EdsaLinkedList *list) {
   probe = &(list->head);
 
   while(*probe) {
-    next = (*probe)->next;
-    free(*probe);
+    next   = (*probe)->next;
+    *probe = linked_list_allocator(*probe, 0);
     *probe = next;
   }
 
   list->head   = NULL;
   list->length = 0;
-  free(list);
+  list         = linked_list_allocator(list, 0);
 }

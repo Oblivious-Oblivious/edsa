@@ -79,16 +79,16 @@ static void pq_min_heapify(EdsaMinPQBinaryHeap *self, size_t index) {
 
 EdsaMinPQBinaryHeap *pq_new(size_t max_size) {
   EdsaMinPQBinaryHeap *self =
-    (EdsaMinPQBinaryHeap *)malloc(sizeof(EdsaMinPQBinaryHeap));
+    (EdsaMinPQBinaryHeap *)pq_allocator(NULL, sizeof(EdsaMinPQBinaryHeap));
   if(self == NULL) {
     return NULL;
   }
   self->max_size = max_size;
   self->size     = 0;
-  self->A        = (void **)malloc(sizeof(void *) * (self->max_size + 1));
+  self->A = (void **)pq_allocator(NULL, sizeof(void *) * (self->max_size + 1));
 
   if(self->A == NULL) {
-    free(self);
+    self = pq_allocator(self, 0);
     return NULL;
   } else {
     return self;
@@ -156,7 +156,6 @@ void pq_print(EdsaMinPQBinaryHeap *self) {
   }
   printf("\n");
 }
-
 void pq_reset(EdsaMinPQBinaryHeap *self) {
   size_t saved_size;
   if(self == NULL) {
@@ -164,8 +163,8 @@ void pq_reset(EdsaMinPQBinaryHeap *self) {
   }
 
   saved_size = self->max_size;
-  free(self->A);
-  self->A = (void **)malloc(sizeof(void *) * (saved_size + 1));
+  self->A    = pq_allocator(self->A, 0);
+  self->A    = (void **)pq_allocator(NULL, sizeof(void *) * (saved_size + 1));
   if(self->A == NULL) {
     self->size     = 0;
     self->max_size = 0;
@@ -179,6 +178,6 @@ void pq_free(EdsaMinPQBinaryHeap *self) {
   if(self == NULL) {
     return;
   }
-  free(self->A);
-  free(self);
+  self->A = pq_allocator(self->A, 0);
+  self    = pq_allocator(self, 0);
 }
