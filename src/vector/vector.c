@@ -6,7 +6,7 @@ void *_vector_growf(
   size_t addlen,
   size_t min_cap,
   void *allocator,
-  vector_alloc_fn alloc
+  allocator_alloc_fn alloc
 ) {
   void *b;
   void *old_header;

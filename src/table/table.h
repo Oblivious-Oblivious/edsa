@@ -1,6 +1,7 @@
 #ifndef __EDSA_TABLE_H_
 #define __EDSA_TABLE_H_
 
+#include "../allocator/allocator.h"
 #include "../boolean/boolean.h"
 #include "../hash/komihash/komihash.h"
 #include "../vector/vector.h"
@@ -49,8 +50,8 @@ typedef struct EdsaTable {
   size_t size;
   size_t tombstones;
   void *allocator;
-  vector_alloc_fn alloc_fn;
-  vector_free_fn free_fn;
+  allocator_alloc_fn alloc_fn;
+  allocator_free_fn free_fn;
 } EdsaTable;
 
 /**
@@ -70,8 +71,8 @@ void table_init(EdsaTable *self);
 void table_set_allocator(
   EdsaTable *self,
   void *allocator_ctx,
-  vector_alloc_fn alloc_fn,
-  vector_free_fn free_fn
+  allocator_alloc_fn alloc_fn,
+  allocator_free_fn free_fn
 );
 
 /**

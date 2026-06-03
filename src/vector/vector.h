@@ -1,15 +1,13 @@
 #ifndef __EDSA_VECTOR_H_
 #define __EDSA_VECTOR_H_
 
+#include "../allocator/allocator.h"
 #include "../preprocessor/preprocessor.h"
 
 #include <stdarg.h> /* va_list, va_arg, va_start, va_end */
 #include <stddef.h> /* ptrdiff_t */
 #include <stdlib.h> /* NULL, realloc */
 #include <string.h> /* memmove, memset */
-
-typedef void *(*vector_alloc_fn)(void *allocator, void *ptr, size_t size);
-typedef void (*vector_free_fn)(void *allocator, void *self);
 
 /**
  * @brief Metadata for a vector.  Stores the size and capacity
@@ -26,8 +24,8 @@ typedef struct {
   size_t size;
   size_t capacity;
   void *allocator;
-  vector_alloc_fn alloc;
-  vector_free_fn free;
+  allocator_alloc_fn alloc;
+  allocator_free_fn free;
 } _vector_header;
 
 /**
@@ -261,7 +259,7 @@ void *_vector_growf(
   size_t addlen,
   size_t min_cap,
   void *allocator,
-  vector_alloc_fn alloc
+  allocator_alloc_fn alloc
 );
 
 #if PREPROCESSOR_C_VERSION >= 2011

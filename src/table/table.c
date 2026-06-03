@@ -120,8 +120,8 @@ void table_init(EdsaTable *self) {
 void table_set_allocator(
   EdsaTable *self,
   void *allocator_ctx,
-  vector_alloc_fn alloc_fn,
-  vector_free_fn free_fn
+  allocator_alloc_fn alloc_fn,
+  allocator_free_fn free_fn
 ) {
   self->allocator = allocator_ctx;
   self->alloc_fn  = alloc_fn;
