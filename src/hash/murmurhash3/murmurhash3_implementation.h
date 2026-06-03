@@ -31,7 +31,7 @@ p_inline uint32_t murmurhash3_fmix32(uint32_t h) {
   return h;
 }
 
-//----------
+/* ---------- */
 
 #if !(PREPROCESSOR_32_BIT || PREPROCESSOR_C_VERSION < 1999)
 p_inline uint64_t murmurhash3_fmix64(uint64_t k) {
@@ -61,10 +61,16 @@ MurmurHash3_x86_128(const void *key, int len, uint32_t seed, void *out) {
   uint32_t c3 = 0x38b34ae5;
   uint32_t c4 = 0xa1e38b93;
 
+  uint32_t k1 = 0;
+  uint32_t k2 = 0;
+  uint32_t k3 = 0;
+  uint32_t k4 = 0;
+
   /* ----------
    * body */
 
   const uint32_t *blocks = (const uint32_t *)(data + nblocks * 16);
+  const uint8_t *tail    = (const uint8_t *)(data + nblocks * 16);
 
   for(i = -nblocks; i; i++) {
     uint32_t k1 = blocks[i * 4 + 0];
@@ -108,16 +114,6 @@ MurmurHash3_x86_128(const void *key, int len, uint32_t seed, void *out) {
     h4 += h1;
     h4 = h4 * 5 + 0x32ac3b17;
   }
-
-  /* ----------
-   * tail */
-
-  const uint8_t *tail = (const uint8_t *)(data + nblocks * 16);
-
-  uint32_t k1 = 0;
-  uint32_t k2 = 0;
-  uint32_t k3 = 0;
-  uint32_t k4 = 0;
 
   switch(len & 15) {
   case 15:
