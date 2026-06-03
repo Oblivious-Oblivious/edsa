@@ -1,6 +1,7 @@
 #ifndef __EDSA_ALLOCATOR_UTILS_H_
 #define __EDSA_ALLOCATOR_UTILS_H_
 
+#include "../boolean/boolean.h"
 #include "../preprocessor/preprocessor.h"
 
 #include <stddef.h> /* ptrdiff_t, size_t */
