@@ -3,53 +3,54 @@
 
 #include <stddef.h> /* size_t, ptrdiff_t */
 
-typedef unsigned char AllocatorArenaBuf;
-
 /**
- * @brief simple arena linear allocator
- * @param buf -> the buffer to allocate from
- * @param buf_len
- * @param prev_offset
- * @param curr_offset
+ * @brief Simple arena linear allocator.
+ *
+ * @param buf         The buffer to allocate from.
+ * @param buf_len     The length of the buffer.
+ * @param prev_offset The previous allocation offset.
+ * @param curr_offset The current allocation offset.
  */
 typedef struct AllocatorArena {
-  AllocatorArenaBuf *buf;
+  unsigned char *buf;
   size_t buf_len;
   size_t prev_offset;
   size_t curr_offset;
 } AllocatorArena;
 
 /**
- * @brief Typical initialization, no malloc used.
- * @param a -> arena
- * @param backing_buffer -> buffer to allocate from
- * @param backing_buffer_len -> length of the buffer
+ * @brief Initializes the arena with a pre-allocated buffer.
+ *
+ * @param a                  The arena to initialize.
+ * @param backing_buffer     The buffer to allocate from.
+ * @param backing_buffer_len The length of the buffer.
  */
 void allocator_arena_init(
   AllocatorArena *a, void *backing_buffer, size_t backing_buffer_len
 );
 
 /**
- * @brief Allocates, reallocates or frees memory from the arena, following the
- * realloc contract: a NULL ptr allocates a fresh block, a zero size frees ptr
- * and returns NULL, otherwise the block is resized preserving its contents.
- * @param a -> arena
- * @param ptr -> the block to resize, or NULL to allocate a fresh block
- * @param size -> the requested size (0 frees ptr)
- * @return void* -> pointer to the (re)allocated block, or NULL when size is 0
+ * @brief Allocates, reallocates, or frees memory from the arena.
+ *
+ * @param self The arena to allocate from.
+ * @param ptr  The block to reallocate, or NULL to allocate a fresh block.
+ * @param size The requested size, or 0 to free ptr.
+ * @return The allocated block, or NULL when the request cannot be served.
  */
-void *allocator_arena_alloc(AllocatorArena *a, void *ptr, size_t size);
+void *allocator_arena_alloc(void *self, void *ptr, size_t size);
 
 /**
- * @brief In an arena allocator this does nothing
- * @param a -> arena
- * @param ptr -> specific pointer to free
+ * @brief Does nothing for arena allocations.
+ *
+ * @param self The arena.
+ * @param ptr  The block to free.
  */
-void allocator_arena_free(AllocatorArena *a, void *ptr);
+void allocator_arena_free(void *self, void *ptr);
 
 /**
- * @brief Frees the complete block by setting the pointer to zero.
- * @param a -> arena
+ * @brief Resets all arena offsets.
+ *
+ * @param a The arena to reset.
  */
 void allocator_arena_free_all(AllocatorArena *a);
 

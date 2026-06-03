@@ -1,22 +1,24 @@
 #ifndef __EDSA_ALLOCATOR_POOL_H_
 #define __EDSA_ALLOCATOR_POOL_H_
 
-#include <stddef.h>
+#include <stddef.h> /* size_t */
 
 /**
- * @brief a node in the free list.
- * @param next the next node in the free list.
+ * @brief A node in the free list.
+ *
+ * @param next The next node in the free list.
  */
 typedef struct AllocatorPoolFreeNode {
   struct AllocatorPoolFreeNode *next;
 } AllocatorPoolFreeNode;
 
 /**
- * @brief defines a memory pool.
- * @param buf the buffer to store the memory pool.
- * @param buf_len the length of the buffer.
- * @param chunk_size the size of each chunk.
- * @param head the head of the free list.
+ * @brief A fixed-size chunk allocator.
+ *
+ * @param buf        The backing buffer.
+ * @param buf_len    The length of the backing buffer.
+ * @param chunk_size The size of each chunk.
+ * @param head       The head of the free list.
  */
 typedef struct AllocatorPool {
   unsigned char *buf;
@@ -26,11 +28,13 @@ typedef struct AllocatorPool {
 } AllocatorPool;
 
 /**
- * @brief initialize the pool with a pre-allocated memory buffer
- * @param p the pool to initialize.
- * @param buf the buffer to initialize the pool with.
- * @param buf_len the length of the buffer.
- * @param chunk_size the size of each chunk.
+ * @brief Initializes the pool with a pre-allocated buffer.
+ *
+ * @param p                     The pool to initialize.
+ * @param backing_buffer        The backing buffer.
+ * @param backing_buffer_length The length of the backing buffer.
+ * @param chunk_size            The size of each chunk.
+ * @param chunk_alignment       The alignment of each chunk.
  */
 void allocator_pool_init(
   AllocatorPool *p,
@@ -41,28 +45,27 @@ void allocator_pool_init(
 );
 
 /**
- * @brief Allocates, reallocates or frees a chunk, following the realloc
- * contract: a NULL ptr pops a fresh chunk off the free list, a zero size frees
- * ptr and returns NULL, otherwise the existing chunk is returned (pool chunks
- * are fixed size).  Requests larger than the chunk size cannot be served and
- * return NULL.
- * @param p the pool to (re)allocate from.
- * @param ptr the chunk to reallocate, or NULL to allocate a fresh chunk.
- * @param size the requested size (0 frees ptr).
- * @return the chunk, or NULL when size is 0 or exceeds the chunk size.
+ * @brief Allocates, reallocates, or frees a pool chunk.
+ *
+ * @param self The pool to allocate from.
+ * @param ptr  The chunk to reallocate, or NULL to allocate a fresh chunk.
+ * @param size The requested size, or 0 to free ptr.
+ * @return The allocated chunk, or NULL when the request cannot be served.
  */
-void *allocator_pool_alloc(AllocatorPool *p, void *ptr, size_t size);
+void *allocator_pool_alloc(void *self, void *ptr, size_t size);
 
 /**
- * @brief pushes on the freed chunk as the head of the free list.
- * @param p the pool to push on the freed chunk to.
- * @param ptr the pointer to the freed chunk.
+ * @brief Pushes a chunk onto the free list.
+ *
+ * @param self The pool.
+ * @param ptr  The chunk to free.
  */
-void allocator_pool_free(AllocatorPool *p, void *ptr);
+void allocator_pool_free(void *self, void *ptr);
 
 /**
- * @brief pushes every chunk in the pool onto the free list.
- * @param p the pool to push every chunk onto the free list.
+ * @brief Pushes every chunk onto the free list.
+ *
+ * @param p The pool.
  */
 void allocator_pool_free_all(AllocatorPool *p);
 
