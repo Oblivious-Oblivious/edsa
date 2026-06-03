@@ -21,15 +21,11 @@
 
 /**
  * @brief Checks whether the structure is empty or not
- * @param self -> The PQ object
- * @return true -> if empty else false
  */
-#define pq_is_empty(self) (vector_size(self) == 0)
+#define pq_is_empty vector_is_empty
 
 /**
  * @brief The number of elements currently in the PQ
- * @param self -> The PQ object
- * @return The size
  */
 #define pq_size vector_size
 
@@ -138,8 +134,12 @@
 
 /**
  * @brief Frees the priority queue
- * @param self -> The PQ object
  */
 #define pq_free vector_free
+
+/**
+ * @brief Makes a priority queue allocator-aware
+ */
+#define pq_set_allocator vector_set_allocator
 
 #endif

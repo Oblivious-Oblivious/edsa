@@ -14,6 +14,10 @@ EdsaLinkedList *linked_list_dup(EdsaLinkedList *list) {
     return NULL;
   }
 
+  linked_list_set_allocator(
+    dup, list->allocator, list->alloc_fn, list->free_fn
+  );
+
   while(*probe) {
     linked_list_add(dup, (*probe)->item);
 

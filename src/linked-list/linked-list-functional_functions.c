@@ -14,6 +14,10 @@ linked_list_map(EdsaLinkedList *list, EdsaLinkedListLambda1 modifier) {
     return NULL;
   }
 
+  linked_list_set_allocator(
+    dup, list->allocator, list->alloc_fn, list->free_fn
+  );
+
   probe = &(list->head);
 
   while(*probe) {
@@ -39,6 +43,10 @@ linked_list_filter(EdsaLinkedList *list, EdsaLinkedListLambda1 filter) {
   if(dup == NULL) {
     return NULL;
   }
+
+  linked_list_set_allocator(
+    dup, list->allocator, list->alloc_fn, list->free_fn
+  );
 
   probe = &(list->head);
 

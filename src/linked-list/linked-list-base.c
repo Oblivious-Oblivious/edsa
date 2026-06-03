@@ -1,16 +1,17 @@
 #include "linked-list-base.h"
 
 EdsaLinkedList *linked_list_new(void) {
-  EdsaLinkedList *list =
-    (EdsaLinkedList *)linked_list_allocator(NULL, sizeof(EdsaLinkedList));
+  EdsaLinkedList *list = (EdsaLinkedList *)malloc(sizeof(EdsaLinkedList));
 
   if(list == NULL) {
     return NULL;
-  } else {
-    list->head   = NULL;
-    list->length = 0;
-    return list;
   }
+  list->head      = NULL;
+  list->length    = 0;
+  list->allocator = NULL;
+  list->alloc_fn  = NULL;
+  list->free_fn   = NULL;
+  return list;
 }
 
 void linked_list_add(EdsaLinkedList *list, void *item) {
@@ -24,8 +25,11 @@ void linked_list_add(EdsaLinkedList *list, void *item) {
   /* Use the address to take advantage of a pointer to pointer approach */
   probe = &(list->head);
 
-  newnode =
-    (struct EdsaLLNode *)linked_list_allocator(NULL, sizeof(struct EdsaLLNode));
+  newnode = list->alloc_fn
+              ? (struct EdsaLLNode *)list->alloc_fn(
+                  list->allocator, NULL, sizeof(struct EdsaLLNode)
+                )
+              : (struct EdsaLLNode *)malloc(sizeof(struct EdsaLLNode));
   if(newnode == NULL) {
     return;
   }
@@ -58,7 +62,11 @@ void linked_list_remove(EdsaLinkedList *list, void *item) {
   if(*probe) {
     old    = *probe;
     *probe = (struct EdsaLLNode *)((*probe)->next);
-    old    = linked_list_allocator(old, 0);
+    if(list->alloc_fn) {
+      list->alloc_fn(list->allocator, old, 0);
+    } else {
+      free(old);
+    }
     list->length--;
   }
 }
@@ -74,12 +82,33 @@ void linked_list_free(EdsaLinkedList *list) {
   probe = &(list->head);
 
   while(*probe) {
-    next   = (*probe)->next;
-    *probe = linked_list_allocator(*probe, 0);
+    if(list->free_fn) {
+      list->free_fn(list->allocator, (*probe)->item);
+    }
+    next = (*probe)->next;
+    if(list->alloc_fn) {
+      list->alloc_fn(list->allocator, *probe, 0);
+    } else {
+      free(*probe);
+    }
     *probe = next;
   }
 
   list->head   = NULL;
   list->length = 0;
-  list         = linked_list_allocator(list, 0);
+  free(list);
+}
+
+void linked_list_set_allocator(
+  EdsaLinkedList *list,
+  void *allocator_ctx,
+  allocator_alloc_fn alloc_fn,
+  allocator_free_fn free_fn
+) {
+  if(list == NULL) {
+    return;
+  }
+  list->allocator = allocator_ctx;
+  list->alloc_fn  = alloc_fn;
+  list->free_fn   = free_fn;
 }

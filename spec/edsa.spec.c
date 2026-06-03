@@ -20,9 +20,11 @@
   #include "hash/murmurhash3/murmurhash3.module.spec.h"
   #include "hash/xxh3/xxh3.module.spec.h"
 #endif
+#include "linked-list/linked-list-allocator.module.spec.h"
 #include "linked-list/linked-list-base.module.spec.h"
 #include "linked-list/linked-list-dup.module.spec.h"
 #include "linked-list/linked-list-functional-functions.module.spec.h"
+#include "min-pq-binary-heap/min-pq-binary-heap-allocator.module.spec.h"
 #include "min-pq-binary-heap/min-pq-binary-heap.module.spec.h"
 #include "preprocessor/preprocessor-number-of-elements.module.spec.h"
 #include "preprocessor/preprocessor-version.module.spec.h"
@@ -65,10 +67,12 @@ int main(void) {
     T_xxh3();
 
     T_linked_list_base();
+    T_linked_list_allocator();
     T_linked_list_dup();
     T_linked_list_functional_functions();
 
     T_min_pq_binary_heap_base();
+    T_min_pq_binary_heap_allocator();
 
     T_preprocessor_number_of_elements();
     T_preprocessor_version();
