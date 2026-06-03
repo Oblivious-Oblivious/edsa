@@ -313,31 +313,31 @@ void *_vector_growf(
       va_end(vars);                                        \
     } while(0)
 
-  p_inline char *_vector_char_new(size_t argc, ...) {
-    char *self = NULL;
-    _vector_new(self, char, int, argc);
-    return self;
-  }
-  p_inline void **_vector_voidptr_new(size_t argc, ...) {
-    void **self = NULL;
-    _vector_new(self, void *, void *, argc);
-    return self;
-  }
-  p_inline char **_vector_charptr_new(size_t argc, ...) {
-    char **self = NULL;
-    _vector_new(self, char *, char *, argc);
-    return self;
-  }
-  p_inline int *_vector_int_new(size_t argc, ...) {
-    int *self = NULL;
-    _vector_new(self, int, int, argc);
-    return self;
-  }
-  p_inline long *_vector_long_new(size_t argc, ...) {
-    long *self = NULL;
-    _vector_new(self, long, long, argc);
-    return self;
-  }
+p_inline char *_vector_char_new(size_t argc, ...) {
+  char *self = NULL;
+  _vector_new(self, char, int, argc);
+  return self;
+}
+p_inline void **_vector_voidptr_new(size_t argc, ...) {
+  void **self = NULL;
+  _vector_new(self, void *, void *, argc);
+  return self;
+}
+p_inline char **_vector_charptr_new(size_t argc, ...) {
+  char **self = NULL;
+  _vector_new(self, char *, char *, argc);
+  return self;
+}
+p_inline int *_vector_int_new(size_t argc, ...) {
+  int *self = NULL;
+  _vector_new(self, int, int, argc);
+  return self;
+}
+p_inline long *_vector_long_new(size_t argc, ...) {
+  long *self = NULL;
+  _vector_new(self, long, long, argc);
+  return self;
+}
 
   #define vector_string_new(...)                                           \
     _vector_charptr_new(                                                   \

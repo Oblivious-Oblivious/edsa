@@ -2,6 +2,10 @@
 #define __EDSA_STRING_FUNCTIONAL_H_
 
 #include "../vector/vector.h"
+#include "string-base.h"
+
+#include <stdarg.h>
+#include <stdio.h>
 
 #if PREPROCESSOR_C_VERSION >= 1999
   #define string_puts(...)                                                 \
@@ -14,7 +18,24 @@
  * @param argc -> The number of the arguments provided by the macros
  * @param __VA_ARGS__ -> The rest of the arguments to iterate through
  **/
-void string_display(size_t argc, ...);
+p_inline void string_display(size_t argc, ...) {
+  size_t i;
+  char *self = string_new("");
+
+  va_list vars;
+  va_start(vars, argc)
+    ;
+    for(i = 0; i < argc; i++) {
+      char *v = va_arg(vars, char *);
+      if(v != NULL) {
+        string_add(self, v);
+      }
+    }
+  va_end(vars);
+
+  printf("displaying: %s\n", self);
+  string_free(self);
+}
 #endif
 
 /**
