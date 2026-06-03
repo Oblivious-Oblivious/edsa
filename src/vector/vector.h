@@ -1,6 +1,7 @@
 #ifndef __EDSA_VECTOR_H_
 #define __EDSA_VECTOR_H_
 
+#include "../allocator/allocator.h"
 #include "../preprocessor/preprocessor.h"
 
 #include <stdarg.h> /* va_list, va_arg, va_start, va_end */
@@ -14,10 +15,17 @@
  * @param size -> The number of elements in the vector
  * @param capacity -> The current capacity in bytes (number of elements *
  * sizeof(type))
+ * @param allocator -> The allocator instance for alloc/free (NULL for default
+ * realloc/free)
+ * @param alloc -> The allocator's alloc function (NULL for default realloc)
+ * @param free -> The vector item free function (NULL for default free)
  */
 typedef struct {
   size_t size;
   size_t capacity;
+  void *allocator;
+  allocator_alloc_fn alloc;
+  allocator_free_fn free;
 } _vector_header;
 
 /**
@@ -35,6 +43,23 @@ typedef struct {
 #define _vector_selfptr_size(self) sizeof(*(self)) /* NOLINT */
 
 /**
+ * @brief Returns the allocator instance stored in the vector header, or NULL
+ * when the vector is NULL or no allocator was set.
+ * @param self -> The vector pointer
+ * @return The stored allocator instance or NULL
+ */
+#define _vector_allocator(self) \
+  ((self) ? _vector_get_header(self)->allocator : NULL)
+
+/**
+ * @brief Returns the alloc function stored in the vector header, or NULL when
+ * the vector is NULL or no allocator was set (the default realloc is used).
+ * @param self -> The vector pointer
+ * @return The stored alloc function or NULL
+ */
+#define _vector_alloc_fn(self) ((self) ? _vector_get_header(self)->alloc : NULL)
+
+/**
  * @brief A grow function that grows the vector by a given number of elements.
  * Is using the address of self and casting it to a void** and then
  * dereferencing it, a trick to treat all types as raw memory in a type-safe
@@ -43,9 +68,15 @@ typedef struct {
  * @param n -> The number of elements to grow the vector by
  * @return The new pointer to the vector
  */
-#define _vector_grow(self, n) \
-  (*(void **)&(self) =        \
-     _vector_growf((self), _vector_selfptr_size(self), (n), 0))
+#define _vector_grow(self, n)         \
+  (*(void **)&(self) = _vector_growf( \
+     (self),                          \
+     _vector_selfptr_size(self),      \
+     (n),                             \
+     0,                               \
+     _vector_allocator(self),         \
+     _vector_alloc_fn(self)           \
+   ))
 
 /**
  * @brief Decides whether to grow the vector or not based on the current
@@ -60,9 +91,22 @@ typedef struct {
      ? (_vector_grow(self, n), 0)                                              \
      : 0)
 
-#ifndef vector_allocator
-  #define vector_allocator realloc
-#endif
+/**
+ * @brief Makes a vector allocator aware.
+ * @param self -> The vector pointer
+ * @param allocator_ctx -> The allocator instance (or NULL)
+ * @param alloc_fn -> The allocator's alloc function (or NULL for default
+ * realloc)
+ * @param free_fn -> The vector item free function, or NULL when not needed
+ */
+#define vector_set_allocator(self, allocator_ctx, alloc_fn, free_fn)        \
+  ((self) ||                                                                \
+     (*(void **)&(self) = _vector_growf(                                    \
+        NULL, _vector_selfptr_size(self), 1, 0, (allocator_ctx), (alloc_fn) \
+      )),                                                                   \
+   _vector_get_header(self)->allocator = (allocator_ctx),                   \
+   _vector_get_header(self)->alloc     = (alloc_fn),                        \
+   _vector_get_header(self)->free      = (free_fn))
 
 #define vector_initialize(self) ((self) = NULL, _vector_maybegrow(self, 1))
 
@@ -187,16 +231,36 @@ void _vector_add_n_helper(
   ((self) ? (ptrdiff_t)_vector_get_header(self)->capacity : 0)
 
 /**
- * @brief Frees the memory of the vector
+ * @brief Frees the memory of the vector using its own free function
  * @param self -> The vector to free
  */
 #define vector_free(self)                                                  \
-  ((self)                                                                  \
-     ? (*(void **)&(self) = vector_allocator(_vector_get_header(self), 0)) \
-     : 0,                                                                  \
-   (self) = NULL)
+  do {                                                                     \
+    if(self) {                                                             \
+      if(_vector_get_header(self)->free) {                                 \
+        _vector_get_header(self)->free(                                    \
+          _vector_get_header(self)->allocator, (self)                      \
+        );                                                                 \
+      }                                                                    \
+      if(_vector_get_header(self)->alloc) {                                \
+        _vector_get_header(self)->alloc(                                   \
+          _vector_get_header(self)->allocator, _vector_get_header(self), 0 \
+        );                                                                 \
+      } else {                                                             \
+        free(_vector_get_header(self));                                    \
+      }                                                                    \
+      (self) = NULL;                                                       \
+    }                                                                      \
+  } while(0)
 
-void *_vector_growf(void *self, size_t elemsize, size_t addlen, size_t min_cap);
+void *_vector_growf(
+  void *self,
+  size_t elemsize,
+  size_t addlen,
+  size_t min_cap,
+  void *allocator,
+  allocator_alloc_fn alloc
+);
 
 #if PREPROCESSOR_C_VERSION >= 2011
   /**

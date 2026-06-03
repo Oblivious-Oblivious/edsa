@@ -1,74 +1,73 @@
 #include "arena.h"
 
-#include "../boolean/boolean.h"
-#include "../preprocessor/preprocessor.h"
 #include "utils.h"
 
-#include <assert.h> /* assert */
 #include <string.h> /* memset */
 
 void allocator_arena_init(
   AllocatorArena *a, void *backing_buffer, size_t backing_buffer_len
 ) {
-  a->buf         = (AllocatorArenaBuf *)backing_buffer;
+  a->buf         = backing_buffer;
   a->buf_len     = backing_buffer_len;
   a->curr_offset = 0;
   a->prev_offset = 0;
 }
 
-void *allocator_arena_resize(
-  AllocatorArena *a, void *old_memory, size_t old_size, size_t new_size
-) {
-  unsigned char *old_mem = (unsigned char *)old_memory;
+void *allocator_arena_alloc(void *self, void *ptr, size_t size) {
+  AllocatorArena *a = self;
+  unsigned char *old_mem;
+  uintptr_t curr_ptr;
+  size_t offset;
 
-  assert(allocator_is_power_of_two(ALLOCATOR_DEFAULT_ALIGNMENT));
-
-  if(old_mem == NULL || old_size == 0) {
-    return allocator_arena_alloc(a, new_size);
-  } else if(a->buf <= old_mem && old_mem < a->buf + a->buf_len) {
-    if(a->buf + a->prev_offset == old_mem) {
-      a->curr_offset = a->prev_offset + new_size;
-      if(new_size > old_size) {
-        /* Zero the new memory by default */
-        memset(&a->buf[a->curr_offset], 0, new_size - old_size);
-      }
-      return old_memory;
-    } else {
-      void *new_memory = allocator_arena_alloc(a, new_size);
-      size_t copy_size = old_size < new_size ? old_size : new_size;
-      /* Copy across old memory to the new memory */
-      memmove(new_memory, old_memory, copy_size);
-      return new_memory;
-    }
-  } else {
-    assert(0 && "Memory is out of bounds of the buffer in this arena");
+  if(size == 0) {
+    allocator_arena_free(a, ptr);
     return NULL;
   }
-}
 
-void *allocator_arena_alloc(AllocatorArena *a, size_t size) {
-  /* Align 'curr_offset' forward to the specified alignment */
-  ptrdiff_t curr_ptr = (ptrdiff_t)a->buf + (ptrdiff_t)a->curr_offset;
-  ptrdiff_t offset =
-    allocator_align_forward(curr_ptr, ALLOCATOR_DEFAULT_ALIGNMENT);
-  offset -= (ptrdiff_t)a->buf; /* Change to relative offset */
+  if(ptr == NULL) {
+    curr_ptr = (uintptr_t)a->buf + a->curr_offset;
+    offset   = allocator_align_forward(curr_ptr, ALLOCATOR_DEFAULT_ALIGNMENT) -
+               (uintptr_t)a->buf;
 
-  /* Check to see if the backing memory has space left */
-  if(offset + size <= a->buf_len) {
-    void *ptr      = &a->buf[offset];
+    if(offset + size > a->buf_len) {
+      return NULL;
+    }
+
     a->prev_offset = offset;
     a->curr_offset = offset + size;
 
-    /* Zero new memory by default */
-    memset(ptr, 0, size);
-    return ptr;
+    return memset(a->buf + offset, 0, size);
   }
-  /* Return NULL if the arena is out of memory (or handle differently) */
-  return NULL;
+
+  old_mem = ptr;
+  if(old_mem < a->buf || old_mem >= a->buf + a->buf_len) {
+    return NULL;
+  }
+
+  if(a->buf + a->prev_offset == old_mem) {
+    size_t old_size = a->curr_offset - a->prev_offset;
+    a->curr_offset  = a->prev_offset + size;
+
+    if(size > old_size) {
+      memset(a->buf + a->prev_offset + old_size, 0, size - old_size);
+    }
+
+    return old_mem;
+  }
+
+  size_t available = (size_t)(a->buf + a->buf_len - old_mem);
+  size_t copy_size = size < available ? size : available;
+  void *new_mem    = allocator_arena_alloc(a, NULL, size);
+
+  if(new_mem != NULL) {
+    memmove(new_mem, old_mem, copy_size);
+  }
+
+  return new_mem;
 }
 
-void allocator_arena_free(AllocatorArena *a, void *ptr) {
-  (void)a;
+void allocator_arena_free(void *self, void *ptr) {
+  (void)self;
   (void)ptr;
 }
 

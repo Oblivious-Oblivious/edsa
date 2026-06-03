@@ -150,7 +150,7 @@ module(T_vector_base, {
     });
 
     context("on external vector add", {
-      it("adds an element to an uninitialized vector", {
+      it("adds an element to an initialized vector", {
         int *vv = NULL;
         vector_initialize(vv);
         _external_vector_add(&vv, 42);
@@ -161,7 +161,7 @@ module(T_vector_base, {
         vector_free(vv);
       });
 
-      it("adds an element to an initialized vector", {
+      it("adds an element to an uninitialized vector", {
         int *vv = NULL;
         _external_vector_add(&vv, 42);
         _external_vector_add(&vv, 43);

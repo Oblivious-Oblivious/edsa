@@ -4,43 +4,37 @@
 #include "../vector/vector.h"
 
 /**
- * @desc: Returns the number of elements pushed in the array
- * @param st -> The stack to use
- * @return The size (st->size)
- **/
+ * @brief Makes a stack allocator-aware
+ */
+#define stack_set_allocator vector_set_allocator
+
+/**
+ * @brief Returns the number of elements pushed in the array
+ */
 #define stack_size vector_size
 
 /**
- * @desc: Checks whether the stack is empty or not
- * @param st -> The stack to use
- * @return A boolean
- **/
-#define stack_is_empty(self) vector_size(self) == 0
+ * @brief Checks whether the stack is empty or not
+ */
+#define stack_is_empty vector_is_empty
 
 /**
- * @desc: Performs  bury operation on the stack
- * @param st -> The stack to use
- * @param item -> The item to push to the stack
- **/
+ * @brief Performs  bury operation on the stack
+ */
 #define stack_push vector_push
 
 /**
- * @desc: Performs a pop operation on the stack
- * @param st -> The stack to use
- * @return The item on the top of the stack
- **/
+ * @brief Performs a pop operation on the stack
+ */
 #define stack_pop vector_pop
 
 /**
- * @desc: Performs a peek operation on the stack
- * @param st -> The stack to use
- * @return The item on top of the stack withou removing it
- **/
+ * @brief Performs a peek operation on the stack
+ */
 #define stack_peek vector_peek
 
 /**
  * @brief Frees the stack memory space
- * @param st -> The stack to free
  */
 #define stack_free vector_free
 

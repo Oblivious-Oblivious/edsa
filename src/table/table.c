@@ -69,6 +69,18 @@ p_inline void _table_rehash(EdsaTable *self) {
   vector_initialize_n(states_new, capacity_new);
   vector_initialize_n(keys_new, capacity_new);
   vector_initialize_n(values_new, capacity_new);
+  vector_set_allocator(
+    hashes_new, self->allocator, self->alloc_fn, self->free_fn
+  );
+  vector_set_allocator(
+    states_new, self->allocator, self->alloc_fn, self->free_fn
+  );
+  vector_set_allocator(
+    keys_new, self->allocator, self->alloc_fn, self->free_fn
+  );
+  vector_set_allocator(
+    values_new, self->allocator, self->alloc_fn, self->free_fn
+  );
   for(i = 0; i < capacity; i++) {
     if(self->states[i] == TABLE_STATE_FILLED) {
       size_t hash         = self->hashes[i];
@@ -100,6 +112,24 @@ void table_init(EdsaTable *self) {
   vector_initialize_n(self->states, TABLE_INITIAL_SIZE);
   self->size       = 0;
   self->tombstones = 0;
+  self->allocator  = NULL;
+  self->alloc_fn   = NULL;
+  self->free_fn    = NULL;
+}
+
+void table_set_allocator(
+  EdsaTable *self,
+  void *allocator_ctx,
+  allocator_alloc_fn alloc_fn,
+  allocator_free_fn free_fn
+) {
+  self->allocator = allocator_ctx;
+  self->alloc_fn  = alloc_fn;
+  self->free_fn   = free_fn;
+  vector_set_allocator(self->keys, allocator_ctx, alloc_fn, free_fn);
+  vector_set_allocator(self->values, allocator_ctx, alloc_fn, free_fn);
+  vector_set_allocator(self->hashes, allocator_ctx, alloc_fn, free_fn);
+  vector_set_allocator(self->states, allocator_ctx, alloc_fn, free_fn);
 }
 
 void table_add(EdsaTable *self, const char *key, size_t value) {
@@ -196,4 +226,7 @@ void table_deinit(EdsaTable *self) {
   self->values     = NULL;
   self->size       = 0;
   self->tombstones = 0;
+  self->allocator  = NULL;
+  self->alloc_fn   = NULL;
+  self->free_fn    = NULL;
 }

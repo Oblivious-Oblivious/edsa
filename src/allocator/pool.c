@@ -2,7 +2,6 @@
 
 #include "utils.h"
 
-#include <assert.h> /* assert */
 #include <stdint.h> /* uintptr_t */
 #include <string.h> /* memset */
 
@@ -13,81 +12,74 @@ void allocator_pool_init(
   size_t chunk_size,
   size_t chunk_alignment
 ) {
-  // Align backing buffer to the specified chunk alignment
-  uintptr_t initial_start = (uintptr_t)backing_buffer;
-  uintptr_t start =
-    allocator_align_forward(initial_start, (uintptr_t)chunk_alignment);
-  backing_buffer_length -= (size_t)(start - initial_start);
+  uintptr_t start         = (uintptr_t)backing_buffer;
+  uintptr_t aligned_start = allocator_align_forward(start, chunk_alignment);
 
-  // Align chunk size up to the required chunk_alignment
-  chunk_size = allocator_align_forward_size(chunk_size, chunk_alignment);
+  backing_buffer_length -= aligned_start - start;
+  chunk_size = allocator_align_forward(chunk_size, chunk_alignment);
 
-  // Assert that the parameters passed are valid
-  assert(
-    chunk_size >= sizeof(AllocatorPoolFreeNode) && "Chunk size is too small"
-  );
-  assert(
-    backing_buffer_length >= chunk_size &&
-    "Backing buffer length is smaller than the chunk size"
-  );
+  if(
+    chunk_size < sizeof(AllocatorPoolFreeNode) ||
+    backing_buffer_length < chunk_size
+  ) {
+    return;
+  }
 
-  // Store the adjusted parameters
-  p->buf        = (unsigned char *)backing_buffer;
+  p->buf        = backing_buffer;
   p->buf_len    = backing_buffer_length;
   p->chunk_size = chunk_size;
-  p->head       = NULL; // Free List Head
+  p->head       = NULL;
 
-  // Set up the free list for free chunks
   allocator_pool_free_all(p);
 }
 
-void *allocator_pool_alloc(AllocatorPool *p) {
-  // Get latest free node
-  AllocatorPoolFreeNode *node = p->head;
+void *allocator_pool_alloc(void *self, void *ptr, size_t size) {
+  AllocatorPool *p = (AllocatorPool *)self;
+  AllocatorPoolFreeNode *node;
 
-  if(node == NULL) {
-    assert(0 && "Pool allocator has no free memory");
+  if(size == 0) {
+    allocator_pool_free(p, ptr);
     return NULL;
   }
 
-  // Pop free node
-  p->head = p->head->next;
+  if(ptr != NULL) {
+    return size <= p->chunk_size ? ptr : NULL;
+  }
 
-  // Zero memory by default
+  if(size > p->chunk_size || p->head == NULL) {
+    return NULL;
+  }
+
+  node    = p->head;
+  p->head = node->next;
+
   return memset(node, 0, p->chunk_size);
 }
 
-void allocator_pool_free(AllocatorPool *p, void *ptr) {
+void allocator_pool_free(void *self, void *ptr) {
+  AllocatorPool *p            = (AllocatorPool *)self;
   AllocatorPoolFreeNode *node = NULL;
 
-  void *start = p->buf;
-  void *end   = &p->buf[p->buf_len];
-
-  if(ptr == NULL) {
-    // Ignore NULL pointers
+  if(
+    ptr == NULL || ptr < (void *)p->buf || ptr >= (void *)(p->buf + p->buf_len)
+  ) {
     return;
   }
 
-  if(!(start <= ptr && ptr < end)) {
-    assert(0 && "Memory is out of bounds of the buffer in this pool");
-    return;
-  }
-
-  // Push free node
   node       = (AllocatorPoolFreeNode *)ptr;
   node->next = p->head;
   p->head    = node;
 }
 
 void allocator_pool_free_all(AllocatorPool *p) {
-  size_t chunk_count = p->buf_len / p->chunk_size;
   size_t i;
+  size_t chunk_count = p->buf_len / p->chunk_size;
 
-  // Set all chunks to be free
+  p->head = NULL;
+
   for(i = 0; i < chunk_count; i++) {
-    void *ptr                   = &p->buf[i * p->chunk_size];
-    AllocatorPoolFreeNode *node = (AllocatorPoolFreeNode *)ptr;
-    // Push free node onto thte free list
+    uintptr_t chunk             = (uintptr_t)p->buf + i * p->chunk_size;
+    AllocatorPoolFreeNode *node = (void *)chunk;
     node->next                  = p->head;
     p->head                     = node;
   }

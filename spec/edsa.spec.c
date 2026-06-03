@@ -20,13 +20,17 @@
   #include "hash/murmurhash3/murmurhash3.module.spec.h"
   #include "hash/xxh3/xxh3.module.spec.h"
 #endif
+#include "linked-list/linked-list-allocator.module.spec.h"
 #include "linked-list/linked-list-base.module.spec.h"
 #include "linked-list/linked-list-dup.module.spec.h"
 #include "linked-list/linked-list-functional-functions.module.spec.h"
+#include "min-pq-binary-heap/min-pq-binary-heap-allocator.module.spec.h"
 #include "min-pq-binary-heap/min-pq-binary-heap.module.spec.h"
 #include "preprocessor/preprocessor-number-of-elements.module.spec.h"
 #include "preprocessor/preprocessor-version.module.spec.h"
+#include "stack/stack-allocator.module.spec.h"
 #include "stack/stack.module.spec.h"
+#include "string/string-allocator.module.spec.h"
 #include "string/string-base.module.spec.h"
 #include "string/string-dup.module.spec.h"
 #include "string/string-functional.module.spec.h"
@@ -34,7 +38,9 @@
 #include "string/string-split.module.spec.h"
 #include "string/string-substring.module.spec.h"
 #include "table/benchmarks/table-general-benchmark.spec.h"
+#include "table/table-allocator.module.spec.h"
 #include "table/table.module.spec.h"
+#include "vector/vector-allocator.module.spec.h"
 #include "vector/vector-base.module.spec.h"
 #include "vector/vector-dup.module.spec.h"
 #include "vector/vector-functional-functions.module.spec.h"
@@ -61,17 +67,21 @@ int main(void) {
     T_xxh3();
 
     T_linked_list_base();
+    T_linked_list_allocator();
     T_linked_list_dup();
     T_linked_list_functional_functions();
 
     T_min_pq_binary_heap_base();
+    T_min_pq_binary_heap_allocator();
 
     T_preprocessor_number_of_elements();
     T_preprocessor_version();
 
     T_stack();
+    T_stack_allocator();
 
     T_string_base();
+    T_string_allocator();
     T_string_dup();
     T_string_functional();
     T_string_interpolation();
@@ -80,8 +90,10 @@ int main(void) {
 
     T_table_general_benchmark();
     T_table();
+    T_table_allocator();
 
     T_vector_base();
+    T_vector_allocator();
     T_vector_dup();
     T_vector_functional_functions();
     T_vector_push_pop_peek();
