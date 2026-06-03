@@ -42,7 +42,7 @@
  * @param index -> The index of the element to fix
  * @param key -> The value of the element to fix
  */
-#define pq_fix_up(self, index, key)                               \
+#define _pq_fix_up(self, index, key)                              \
   do {                                                            \
     size_t _pq_i  = (index);                                      \
     (self)[_pq_i] = (key);                                        \
@@ -58,7 +58,7 @@
  * @param index -> The index of the element to fix
  * @param key -> The value of the element to fix
  */
-#define pq_fix_down(self, index, key)                                     \
+#define _pq_fix_down(self, index, key)                                    \
   do {                                                                    \
     size_t _pq_i    = (index);                                            \
     size_t _pq_size = vector_size(self);                                  \
@@ -86,10 +86,10 @@
  * @param self -> The PQ object
  * @param key -> The value of the new element
  */
-#define pq_insert(self, key)                                     \
-  do {                                                           \
-    vector_push((self), (key));                                  \
-    pq_fix_up((self), vector_size(self) - 1, vector_last(self)); \
+#define pq_insert(self, key)                                      \
+  do {                                                            \
+    vector_push((self), (key));                                   \
+    _pq_fix_up((self), vector_size(self) - 1, vector_last(self)); \
   } while(0)
 
 /**
@@ -97,13 +97,13 @@
  * `pq_get_min`.  Does nothing on an empty queue
  * @param self -> The PQ object
  */
-#define pq_delete_min(self)              \
-  do {                                   \
-    if(vector_size(self) > 0) {          \
-      (self)[0] = vector_last(self);     \
-      vector_remove_last(self);          \
-      pq_fix_down((self), 0, (self)[0]); \
-    }                                    \
+#define pq_delete_min(self)               \
+  do {                                    \
+    if(vector_size(self) > 0) {           \
+      (self)[0] = vector_last(self);      \
+      vector_remove_last(self);           \
+      _pq_fix_down((self), 0, (self)[0]); \
+    }                                     \
   } while(0)
 
 /**
