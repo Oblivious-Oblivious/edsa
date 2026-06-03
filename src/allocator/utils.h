@@ -3,7 +3,6 @@
 
 #include "../preprocessor/preprocessor.h"
 
-#include <assert.h> /* assert */
 #include <stddef.h> /* ptrdiff_t, size_t */
 #include <stdint.h> /* uintptr_t */
 
@@ -32,7 +31,9 @@ p_inline bool allocator_is_power_of_two(ptrdiff_t x) {
 p_inline ptrdiff_t allocator_align_forward(ptrdiff_t ptr, size_t align) {
   ptrdiff_t p, a, modulo;
 
-  assert(allocator_is_power_of_two(align));
+  if(!allocator_is_power_of_two(align)) {
+    return ptr;
+  }
 
   p      = ptr;
   a      = (ptrdiff_t)align;
@@ -50,7 +51,9 @@ p_inline ptrdiff_t allocator_align_forward(ptrdiff_t ptr, size_t align) {
 p_inline size_t allocator_align_forward_size(size_t ptr, size_t align) {
   size_t a, p, modulo;
 
-  assert(allocator_is_power_of_two((ptrdiff_t)align));
+  if(!allocator_is_power_of_two((ptrdiff_t)align)) {
+    return ptr;
+  }
 
   a      = align;
   p      = ptr;

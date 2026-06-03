@@ -55,7 +55,7 @@ module(T_allocator_pool, {
       memset(buffer, 0xFF, sizeof(buffer));
       allocator_pool_init(&pool, buffer, sizeof(buffer), 8, 8);
 
-      allocation = allocator_pool_alloc(&pool);
+      allocation = allocator_pool_alloc(&pool, NULL, 8);
 
       assert_that(allocation isnot NULL);
       assert_that_size_t((uintptr_t)allocation % 8 equals to 0);
@@ -74,10 +74,10 @@ module(T_allocator_pool, {
 
       allocator_pool_init(&pool, buffer, sizeof(buffer), 8, 8);
 
-      first  = allocator_pool_alloc(&pool);
-      second = allocator_pool_alloc(&pool);
-      third  = allocator_pool_alloc(&pool);
-      fourth = allocator_pool_alloc(&pool);
+      first  = allocator_pool_alloc(&pool, NULL, 8);
+      second = allocator_pool_alloc(&pool, NULL, 8);
+      third  = allocator_pool_alloc(&pool, NULL, 8);
+      fourth = allocator_pool_alloc(&pool, NULL, 8);
 
       assert_that(first isnot NULL);
       assert_that(second isnot NULL);
@@ -102,12 +102,12 @@ module(T_allocator_pool, {
       void *reused;
 
       allocator_pool_init(&pool, buffer, sizeof(buffer), 8, 8);
-      first  = allocator_pool_alloc(&pool);
-      second = allocator_pool_alloc(&pool);
+      first  = allocator_pool_alloc(&pool, NULL, 8);
+      second = allocator_pool_alloc(&pool, NULL, 8);
 
       allocator_pool_free(&pool, first);
       allocator_pool_free(&pool, second);
-      reused = allocator_pool_alloc(&pool);
+      reused = allocator_pool_alloc(&pool, NULL, 8);
 
       assert_that(reused is second);
     });
@@ -135,16 +135,16 @@ module(T_allocator_pool, {
       void *third;
 
       allocator_pool_init(&pool, buffer, sizeof(buffer), 8, 8);
-      allocator_pool_alloc(&pool);
-      allocator_pool_alloc(&pool);
-      allocator_pool_alloc(&pool);
+      allocator_pool_alloc(&pool, NULL, 8);
+      allocator_pool_alloc(&pool, NULL, 8);
+      allocator_pool_alloc(&pool, NULL, 8);
       assert_that(pool.head is NULL);
 
       allocator_pool_free_all(&pool);
 
-      first  = allocator_pool_alloc(&pool);
-      second = allocator_pool_alloc(&pool);
-      third  = allocator_pool_alloc(&pool);
+      first  = allocator_pool_alloc(&pool, NULL, 8);
+      second = allocator_pool_alloc(&pool, NULL, 8);
+      third  = allocator_pool_alloc(&pool, NULL, 8);
 
       assert_that(first isnot NULL);
       assert_that(second isnot NULL);
@@ -165,19 +165,19 @@ module(T_allocator_pool, {
       &p, backing_buffer, 1024, 64, ALLOCATOR_DEFAULT_ALIGNMENT
     );
 
-    a = allocator_pool_alloc(&p);
-    b = allocator_pool_alloc(&p);
-    c = allocator_pool_alloc(&p);
-    d = allocator_pool_alloc(&p);
-    e = allocator_pool_alloc(&p);
-    f = allocator_pool_alloc(&p);
+    a = allocator_pool_alloc(&p, NULL, 64);
+    b = allocator_pool_alloc(&p, NULL, 64);
+    c = allocator_pool_alloc(&p, NULL, 64);
+    d = allocator_pool_alloc(&p, NULL, 64);
+    e = allocator_pool_alloc(&p, NULL, 64);
+    f = allocator_pool_alloc(&p, NULL, 64);
 
     allocator_pool_free(&p, f);
     allocator_pool_free(&p, c);
     allocator_pool_free(&p, b);
     allocator_pool_free(&p, d);
 
-    d = allocator_pool_alloc(&p);
+    d = allocator_pool_alloc(&p, NULL, 64);
     assert_that(d isnot NULL);
     assert_that(d isnot a);
     assert_that(d isnot b);
@@ -187,7 +187,7 @@ module(T_allocator_pool, {
 
     allocator_pool_free(&p, a);
 
-    a = allocator_pool_alloc(&p);
+    a = allocator_pool_alloc(&p, NULL, 64);
     assert_that(a isnot NULL);
     assert_that(a isnot b);
     assert_that(a isnot c);
@@ -199,9 +199,9 @@ module(T_allocator_pool, {
     allocator_pool_free(&p, a);
     allocator_pool_free(&p, d);
 
-    assert_that(allocator_pool_alloc(&p) is d);
-    assert_that(allocator_pool_alloc(&p) is a);
-    assert_that(allocator_pool_alloc(&p) is e);
+    assert_that(allocator_pool_alloc(&p, NULL, 64) is d);
+    assert_that(allocator_pool_alloc(&p, NULL, 64) is a);
+    assert_that(allocator_pool_alloc(&p, NULL, 64) is e);
   });
 })
 

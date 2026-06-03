@@ -30,25 +30,15 @@ void allocator_arena_init(
 );
 
 /**
- * @brief resizes the arena to a new size (like a dynamic vector)
- *
- * @param a -> the arena pointer.
- * @param old_memory -> current memory from the arena
- * @param old_size -> current size
- * @param new_size
- * @return void* -> the newly allocated memory
- */
-void *allocator_arena_resize(
-  AllocatorArena *a, void *old_memory, size_t old_size, size_t new_size
-);
-
-/**
- * @brief Allocates a block of memory from the arena
+ * @brief Allocates, reallocates or frees memory from the arena, following the
+ * realloc contract: a NULL ptr allocates a fresh block, a zero size frees ptr
+ * and returns NULL, otherwise the block is resized preserving its contents.
  * @param a -> arena
- * @param size -> size of the block to allocate
- * @return void* -> pointer to the allocated block
+ * @param ptr -> the block to resize, or NULL to allocate a fresh block
+ * @param size -> the requested size (0 frees ptr)
+ * @return void* -> pointer to the (re)allocated block, or NULL when size is 0
  */
-void *allocator_arena_alloc(AllocatorArena *a, size_t size);
+void *allocator_arena_alloc(AllocatorArena *a, void *ptr, size_t size);
 
 /**
  * @brief In an arena allocator this does nothing

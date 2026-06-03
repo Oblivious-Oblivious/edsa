@@ -2,7 +2,6 @@
 
 #include "utils.h"
 
-#include <assert.h> /* assert */
 #include <stdint.h> /* uintptr_t */
 #include <string.h> /* memset */
 
@@ -23,13 +22,12 @@ void allocator_pool_init(
   chunk_size = allocator_align_forward_size(chunk_size, chunk_alignment);
 
   // Assert that the parameters passed are valid
-  assert(
-    chunk_size >= sizeof(AllocatorPoolFreeNode) && "Chunk size is too small"
-  );
-  assert(
-    backing_buffer_length >= chunk_size &&
-    "Backing buffer length is smaller than the chunk size"
-  );
+  if(chunk_size < sizeof(AllocatorPoolFreeNode)) {
+    return;
+  }
+  if(backing_buffer_length < chunk_size) {
+    return;
+  }
 
   // Store the adjusted parameters
   p->buf        = (unsigned char *)backing_buffer;
@@ -41,16 +39,30 @@ void allocator_pool_init(
   allocator_pool_free_all(p);
 }
 
-void *allocator_pool_alloc(AllocatorPool *p) {
-  // Get latest free node
-  AllocatorPoolFreeNode *node = p->head;
+void *allocator_pool_alloc(AllocatorPool *p, void *ptr, size_t size) {
+  AllocatorPoolFreeNode *node;
 
-  if(node == NULL) {
-    assert(0 && "Pool allocator has no free memory");
+  // A zero size frees the chunk, following the realloc contract
+  if(size == 0) {
+    allocator_pool_free(p, ptr);
     return NULL;
   }
 
-  // Pop free node
+  // The pool only hands out fixed-size chunks; larger requests cannot be served
+  if(size > p->chunk_size) {
+    return NULL;
+  }
+
+  // A non-NULL chunk already spans chunk_size, so it still fits
+  if(ptr != NULL) {
+    return ptr;
+  }
+
+  // Pop the head of the free list for a fresh chunk
+  node = p->head;
+  if(node == NULL) {
+    return NULL;
+  }
   p->head = p->head->next;
 
   // Zero memory by default
@@ -69,7 +81,6 @@ void allocator_pool_free(AllocatorPool *p, void *ptr) {
   }
 
   if(!(start <= ptr && ptr < end)) {
-    assert(0 && "Memory is out of bounds of the buffer in this pool");
     return;
   }
 

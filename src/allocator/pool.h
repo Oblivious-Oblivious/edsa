@@ -41,11 +41,17 @@ void allocator_pool_init(
 );
 
 /**
- * @brief pops off the head from the free list.
- * @param p the pool to pop off the head from.
- * @return the pointer to the allocated memory.
+ * @brief Allocates, reallocates or frees a chunk, following the realloc
+ * contract: a NULL ptr pops a fresh chunk off the free list, a zero size frees
+ * ptr and returns NULL, otherwise the existing chunk is returned (pool chunks
+ * are fixed size).  Requests larger than the chunk size cannot be served and
+ * return NULL.
+ * @param p the pool to (re)allocate from.
+ * @param ptr the chunk to reallocate, or NULL to allocate a fresh chunk.
+ * @param size the requested size (0 frees ptr).
+ * @return the chunk, or NULL when size is 0 or exceeds the chunk size.
  */
-void *allocator_pool_alloc(AllocatorPool *p);
+void *allocator_pool_alloc(AllocatorPool *p, void *ptr, size_t size);
 
 /**
  * @brief pushes on the freed chunk as the head of the free list.

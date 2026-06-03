@@ -29,7 +29,7 @@ module(T_allocator_arena, {
       unsigned char *allocation;
 
       allocator_arena_init(&arena, buffer, sizeof(buffer));
-      allocation = allocator_arena_alloc(&arena, 4);
+      allocation = allocator_arena_alloc(&arena, NULL, 4);
 
       assert_that(allocation isnot NULL);
       assert_that(allocation is buffer);
@@ -48,8 +48,8 @@ module(T_allocator_arena, {
       void *second;
 
       allocator_arena_init(&arena, buffer, sizeof(buffer));
-      first  = allocator_arena_alloc(&arena, 1);
-      second = allocator_arena_alloc(&arena, 1);
+      first  = allocator_arena_alloc(&arena, NULL, 1);
+      second = allocator_arena_alloc(&arena, NULL, 1);
 
       assert_that(first isnot NULL);
       assert_that(second isnot NULL);
@@ -73,7 +73,8 @@ module(T_allocator_arena, {
 
       allocator_arena_init(&arena, buffer, sizeof(buffer));
 
-      assert_that(allocator_arena_alloc(&arena, sizeof(buffer) + 1) is NULL);
+      assert_that(allocator_arena_alloc(&arena, NULL, sizeof(buffer) + 1)
+                    is NULL);
       assert_that_size_t(arena.curr_offset equals to 0);
       assert_that_size_t(arena.prev_offset equals to 0);
     });
@@ -85,7 +86,7 @@ module(T_allocator_arena, {
       AllocatorArena arena;
 
       allocator_arena_init(&arena, buffer, sizeof(buffer));
-      allocator_arena_alloc(&arena, 4);
+      allocator_arena_alloc(&arena, NULL, 4);
       allocator_arena_free_all(&arena);
 
       assert_that_size_t(arena.prev_offset equals to 0);
@@ -108,9 +109,9 @@ module(T_allocator_arena, {
       // Reset all arena offsets for each loop
       allocator_arena_free_all(&a);
 
-      x   = (int *)allocator_arena_alloc(&a, sizeof(int));
-      f   = (float *)allocator_arena_alloc(&a, sizeof(float));
-      str = allocator_arena_alloc(&a, 10);
+      x   = (int *)allocator_arena_alloc(&a, NULL, sizeof(int));
+      f   = (float *)allocator_arena_alloc(&a, NULL, sizeof(float));
+      str = allocator_arena_alloc(&a, NULL, 10);
 
       *x = 123;
       *f = 987;
@@ -120,7 +121,7 @@ module(T_allocator_arena, {
       assert_that_float(*f equals to 987);
       assert_that_charptr(str equals to "Hellope");
 
-      str = allocator_arena_resize(&a, str, 10, 16);
+      str = allocator_arena_alloc(&a, str, 16);
       memmove(str + 7, " world!", 7);
 
       assert_that_charptr(str equals to "Hellope world!");
