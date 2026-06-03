@@ -37,6 +37,9 @@
  * @param states -> The state of each bucket (empty or filled)
  * @param size -> The number of elements in the hash table
  * @param tombstones -> The number of tombstones in the hash table
+ * @param allocator -> The allocator instance (NULL for default realloc/free)
+ * @param alloc_fn -> The allocator's alloc function (NULL for default realloc)
+ * @param free_fn -> The table item free function (NULL for default free)
  */
 typedef struct EdsaTable {
   const char **keys;
@@ -45,6 +48,9 @@ typedef struct EdsaTable {
   uint8_t *states;
   size_t size;
   size_t tombstones;
+  void *allocator;
+  vector_alloc_fn alloc_fn;
+  vector_free_fn free_fn;
 } EdsaTable;
 
 /**
@@ -52,6 +58,21 @@ typedef struct EdsaTable {
  * @param self
  */
 void table_init(EdsaTable *self);
+
+/**
+ * @brief Makes a table allocator-aware. Must be called after table_init.
+ * @param self -> The hash table
+ * @param allocator_ctx -> The allocator instance (or NULL)
+ * @param alloc_fn -> The allocator's alloc function (or NULL for default
+ * realloc)
+ * @param free_fn -> The table item free function, or NULL when not needed
+ */
+void table_set_allocator(
+  EdsaTable *self,
+  void *allocator_ctx,
+  vector_alloc_fn alloc_fn,
+  vector_free_fn free_fn
+);
 
 /**
  * @brief Inserts a key-value pair into the hash table (open addressing)

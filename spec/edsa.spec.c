@@ -26,7 +26,9 @@
 #include "min-pq-binary-heap/min-pq-binary-heap.module.spec.h"
 #include "preprocessor/preprocessor-number-of-elements.module.spec.h"
 #include "preprocessor/preprocessor-version.module.spec.h"
+#include "stack/stack-allocator.module.spec.h"
 #include "stack/stack.module.spec.h"
+#include "string/string-allocator.module.spec.h"
 #include "string/string-base.module.spec.h"
 #include "string/string-dup.module.spec.h"
 #include "string/string-functional.module.spec.h"
@@ -34,6 +36,7 @@
 #include "string/string-split.module.spec.h"
 #include "string/string-substring.module.spec.h"
 #include "table/benchmarks/table-general-benchmark.spec.h"
+#include "table/table-allocator.module.spec.h"
 #include "table/table.module.spec.h"
 #include "vector/vector-allocator.module.spec.h"
 #include "vector/vector-base.module.spec.h"
@@ -71,8 +74,10 @@ int main(void) {
     T_preprocessor_version();
 
     T_stack();
+    T_stack_allocator();
 
     T_string_base();
+    T_string_allocator();
     T_string_dup();
     T_string_functional();
     T_string_interpolation();
@@ -81,6 +86,7 @@ int main(void) {
 
     T_table_general_benchmark();
     T_table();
+    T_table_allocator();
 
     T_vector_base();
     T_vector_allocator();

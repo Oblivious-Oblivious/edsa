@@ -4,6 +4,11 @@
 #include "../vector/vector.h"
 
 /**
+ * @brief Makes a stack allocator-aware
+ */
+#define stack_set_allocator vector_set_allocator
+
+/**
  * @desc: Returns the number of elements pushed in the array
  * @param st -> The stack to use
  * @return The size (st->size)

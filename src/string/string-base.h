@@ -7,6 +7,11 @@
 #include <stddef.h> /* size_t */
 
 /**
+ * @brief Makes a string allocator-aware
+ */
+#define string_set_allocator vector_set_allocator
+
+/**
  * @brief Create an string
  * @param initial_string -> The initial string to set
  * @return The string
