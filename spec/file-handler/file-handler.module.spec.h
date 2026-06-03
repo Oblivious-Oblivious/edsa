@@ -3,66 +3,34 @@
 
 #include "../../libs/cSpec/export/cSpec.h"
 #include "../../src/file-handler/file-handler.h"
-
-static EdsaFileHandler loader = {0};
-static void setup_file_loader(void) { file_handler_init(&loader); }
+#include "../../src/string/string-base.h"
 
 module(T_file_handler, {
-  before_each(&setup_file_loader);
-
-  describe("File Loader", {
-    it("creates a file_loader object", {
-      EdsaFileHandler fl = {0};
-      file_handler_init(&fl);
-      assert_that(&fl isnot NULL);
-      assert_that(fl.fd is NULL);
-      assert_that(fl.filepath is NULL);
+  describe("file handler", {
+    it("returns NULL when reading a non-existent file", {
+      char *res = file_handler_read("this_filename_does_not_exist");
+      assert_that(res is NULL);
     });
 
-    context("on opening an existing file", {
-      bool _res = file_handler_open(&loader, "new_file.txt", "w");
-      assert_that(_res is true);
-
-      it("reads file: `new_file.txt`", {
-        int actual = file_handler_open(&loader, "new_file.txt", "r");
-        assert_that(actual is true);
-      });
-
-      file_handler_close(&loader);
+    it("reads a file after writing to it", {
+      file_handler_write("new_file.txt", "hello");
+      char *res = file_handler_read("new_file.txt");
+      assert_that_charptr(res equals to "hello");
+      string_free(res);
     });
 
-    context("on opening an non existent file", {
-      it("fails to read a file that is not yet created", {
-        int actual =
-          file_handler_open(&loader, "this_filename_does_not_exist", "r");
-        assert_that(actual is false);
-      });
-    });
-
-    context("on closing a file loader", {
-      it("opens a file and successfully closes the buffer", {
-        bool _res = file_handler_open(&loader, "new_file.txt", "r");
-        assert_that(_res is true);
-        file_handler_close(&loader);
-        assert_that(loader.fd isnot NULL);
-      });
-    });
-
-    context("on deiniting a file loader", {
-      it("de inits the file", {
-        bool _res = file_handler_open(&loader, "new_file.txt", "r");
-        assert_that(_res is true);
-        file_handler_deinit(&loader);
-        assert_that(loader.fd is NULL);
-        assert_that(loader.filepath is NULL);
-      });
+    it("writes a line to a file", {
+      file_handler_write_line("new_file2.txt", "hello");
+      file_handler_write_line("new_file2.txt", "hello2");
+      file_handler_write_line("new_file2.txt", "hello3");
+      char *res = file_handler_read("new_file2.txt");
+      assert_that_charptr(res equals to "hello\nhello2\nhello3\n");
+      string_free(res);
     });
   });
 
-  after({
-    remove("new_file.txt");
-    remove("test_file.txt");
-  });
+  after({ remove("new_file.txt"); });
+  after({ remove("new_file2.txt"); });
 })
 
 #endif
