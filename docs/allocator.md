@@ -10,75 +10,106 @@ Pluggable allocation strategies and helpers used by data structures.
 
 ## Common interface
 
-```c
-typedef void *(*allocator_alloc_fn)(void *allocator, void *ptr, size_t size);
-typedef void (*allocator_free_fn)(void *allocator, void *self);
-```
+| Type / callback      | Description                                                                  |
+| -------------------- | ---------------------------------------------------------------------------- |
+| `allocator_alloc_fn` | Allocate (`ptr == NULL`), grow (`size > 0`), or free a block (`size == 0`)   |
+| `allocator_free_fn`  | Optional teardown for a whole container (e.g. free every string in a vector) |
 
-Pass `allocator_arena_alloc` or `allocator_pool_alloc` as `alloc_fn`, and optional custom `free_fn` callbacks, via `*_set_allocator` on supported types (e.g. `vector_set_allocator`, `stack_set_allocator`, `table_set_allocator`).
-
-`alloc_fn(self, NULL, size)` allocates; `alloc_fn(self, ptr, new_size)` grows; `alloc_fn(self, ptr, 0)` frees a block.
+Wire allocators through `*_set_allocator` on supported types (`vector_set_allocator`, `stack_set_allocator`, `table_set_allocator`, etc.). Pass `allocator_arena_alloc` or `allocator_pool_alloc` as `alloc_fn`.
 
 ## Arena
 
-Linear bump allocator over a fixed backing buffer. Fast allocations; individual frees are no-ops until you reset the whole arena.
+Linear bump allocator over a fixed backing buffer. Reset the arena to reclaim everything.
 
-| Function                                 | Description                                  |
-| ---------------------------------------- | -------------------------------------------- |
-| `allocator_arena_init(a, buf, len)`      | Bind arena to a buffer                       |
-| `allocator_arena_alloc(self, ptr, size)` | Allocate / grow / free                       |
-| `allocator_arena_free(self, ptr)`        | No-op (arena does not reclaim single blocks) |
-| `allocator_arena_free_all(a)`            | Reset offsets to reuse the buffer            |
+| Function                                 | Description                                            |
+| ---------------------------------------- | ------------------------------------------------------ |
+| `allocator_arena_init(a, buf, len)`      | Bind the arena to a caller-owned buffer                |
+| `allocator_arena_alloc(self, ptr, size)` | Bump-allocate, grow in place, or free when `size == 0` |
+| `allocator_arena_free(self, ptr)`        | No-op; arena memory is not freed per block             |
+| `allocator_arena_free_all(a)`            | Reset bump offsets so the buffer can be reused         |
 
 ## Pool
 
-Fixed-size chunk allocator with a free list. Requests must fit in `chunk_size`.
+Fixed-size chunk allocator backed by a free list. Each request must fit in `chunk_size`.
 
-| Function                                                  | Description                       |
-| --------------------------------------------------------- | --------------------------------- |
-| `allocator_pool_init(p, buf, len, chunk_size, alignment)` | Set up pool                       |
-| `allocator_pool_alloc(self, ptr, size)`                   | Take or return a chunk            |
-| `allocator_pool_free(self, ptr)`                          | Return chunk to free list         |
-| `allocator_pool_free_all(p)`                              | Reset all chunks to the free list |
+| Function                                                  | Description                                           |
+| --------------------------------------------------------- | ----------------------------------------------------- |
+| `allocator_pool_init(p, buf, len, chunk_size, alignment)` | Prepare chunks from a backing buffer                  |
+| `allocator_pool_alloc(self, ptr, size)`                   | Hand out a zeroed chunk, grow, or return when freeing |
+| `allocator_pool_free(self, ptr)`                          | Push one chunk back onto the free list                |
+| `allocator_pool_free_all(p)`                              | Return every chunk to the free list                   |
 
 ## Reference counting
 
 Lightweight refcount wrapper with a user-supplied destructor.
 
-| Function / macro                       | Description                                 |
-| -------------------------------------- | ------------------------------------------- |
-| `allocator_rc_alloc(counted, free_fn)` | Start with count 1                          |
-| `allocator_rc_use(counted)`            | Increment count                             |
-| `allocator_rc_release(obj, counted)`   | Decrement; call `free_fn` when count hits 0 |
+| Function / macro                       | Description                                                |
+| -------------------------------------- | ---------------------------------------------------------- |
+| `allocator_rc_alloc(counted, free_fn)` | Initialize with reference count 1 and a destructor         |
+| `allocator_rc_use(counted)`            | Increment the reference count                              |
+| `allocator_rc_release(obj, counted)`   | Decrement; run `free_fn` on `obj` when the count reaches 0 |
 
 ## Utils
 
-| Function / macro                            | Description                          |
-| ------------------------------------------- | ------------------------------------ |
-| `ALLOCATOR_DEFAULT_ALIGNMENT`               | Default alignment (2 × pointer size) |
-| `allocator_is_power_of_two(x)`              | Power-of-two test                    |
-| `allocator_align_forward(ptr, align)`       | Align a uintptr_t                    |
-| `allocator_align_forward_size(size, align)` | Align a size                         |
+| Macro                         | Description                              |
+| ----------------------------- | ---------------------------------------- |
+| `ALLOCATOR_DEFAULT_ALIGNMENT` | Default alignment (`2 * sizeof(void *)`) |
 
-## Example (arena-backed stack)
+## Example
 
 ```c
 #include "edsa.h"
+
 #include <stdio.h>
 
+static void rc_free_string(void *obj) {
+  char *str = (char *)obj;
+  string_free(str);
+}
+
 int main(void) {
-  unsigned char buffer[2048];
-  AllocatorArena arena;
-  int *st = NULL;
+  unsigned char arena_buf[2048];
+  AllocatorArena arena = {0};
+  void *block          = NULL;
 
-  allocator_arena_init(&arena, buffer, sizeof(buffer));
-  stack_set_allocator(st, &arena, allocator_arena_alloc, NULL);
+  unsigned char pool_buf[256];
+  AllocatorPool pool = {0};
+  void *chunk        = NULL;
 
-  stack_push(st, 10);
-  stack_push(st, 20);
-  printf("%d\n", stack_pop(st));
+  AllocatorRc counted = {0};
+  char *shared        = string_new("shared");
 
-  stack_free(st);
+  /* Arena */
+  allocator_arena_init(&arena, arena_buf, sizeof(arena_buf));
+  block = allocator_arena_alloc(&arena, NULL, 64);
+  printf("before arena free     : offset=%zu\n", arena.curr_offset);
+  allocator_arena_free(&arena, block);
+  printf("after arena free      : offset=%zu\n", arena.curr_offset);
   allocator_arena_free_all(&arena);
+  printf("after arena free_all  : offset=%zu\n", arena.curr_offset);
+
+  /* Pool */
+  printf("\n");
+  allocator_pool_init(
+    &pool, pool_buf, sizeof(pool_buf), 32, ALLOCATOR_DEFAULT_ALIGNMENT
+  );
+  chunk = allocator_pool_alloc(&pool, NULL, 32);
+  printf("before pool free     : head=%p\n", (void *)pool.head);
+  allocator_pool_free(&pool, chunk);
+  printf("after pool free      : head=%p\n", (void *)pool.head);
+  allocator_pool_free_all(&pool);
+  printf("after pool free_all  : head=%p\n", (void *)pool.head);
+
+  /* Reference counting */
+  printf("\n");
+  allocator_rc_alloc(&counted, rc_free_string);
+  allocator_rc_use(&counted);
+  allocator_rc_use(&counted);
+  printf("before rc release: count=%td shared=%p\n", counted.count, shared);
+  allocator_rc_release(shared, &counted);
+  allocator_rc_release(shared, &counted);
+  printf("after rc release : count=%td shared=%p\n", counted.count, shared);
+
+  return 0;
 }
 ```

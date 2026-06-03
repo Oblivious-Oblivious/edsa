@@ -20,14 +20,24 @@ Macro-based stack operations on a raw pointer. No allocation; you provide the ba
 
 ```c
 #include "edsa.h"
+
 #include <stdio.h>
 
 int main(void) {
   int st[65536];
   int *sp = st;
+  int res_pop, res_peek_0, res_peek_1;
 
+  fs_push(sp, 40);
+  fs_push(sp, 41);
   fs_push(sp, 42);
-  int res = fs_pop(sp);
-  printf("%d\n", res);
+  res_pop    = fs_pop(sp);
+  res_peek_0 = fs_peek(sp, 0);
+  res_peek_1 = fs_peek(sp, 1);
+  printf("%d\n", res_pop);
+  printf("%d\n", res_peek_0);
+  printf("%d\n", res_peek_1);
+
+  return 0;
 }
 ```

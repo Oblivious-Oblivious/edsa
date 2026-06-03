@@ -1,6 +1,6 @@
 # Min Priority Queue (Binary Heap)
 
-Min-heap priority queue built on the dynamic vector. Values must support `<` comparison (e.g. `int *`, `void **` used as integers).
+Min-heap priority queue built on the dynamic vector. Element type must support `<` (e.g. `int *` storing integers).
 
 ## Include
 
@@ -10,35 +10,55 @@ Min-heap priority queue built on the dynamic vector. Values must support `<` com
 
 ## API
 
-| Macro                   | Description                                  |
-| ----------------------- | -------------------------------------------- |
-| `pq_insert(pq, key)`    | Insert and heapify up                        |
-| `pq_get_min(pq)`        | Peek minimum (index 0), or `NULL`/0 if empty |
-| `pq_delete_min(pq)`     | Remove minimum and restore heap              |
-| `pq_size(pq)`           | Element count (alias of `vector_size`)       |
-| `pq_is_empty(pq)`       | True when empty                              |
-| `pq_free(pq)`           | Free backing storage                         |
-| `pq_reset(pq)`          | Clear elements, keep capacity                |
-| `pq_set_allocator(...)` | Custom allocator (via vector)                |
+| Macro                   | Description                                                       |
+| ----------------------- | ----------------------------------------------------------------- |
+| `pq_insert(pq, key)`    | Append `key` and sift up to restore the min-heap property         |
+| `pq_get_min(pq)`        | Return the smallest element (`pq[0]`), or `NULL` / 0 if empty     |
+| `pq_delete_min(pq)`     | Remove the minimum, move the last leaf to the root, and sift down |
+| `pq_size(pq)`           | Number of elements (alias of `vector_size`)                       |
+| `pq_is_empty(pq)`       | True when the queue has no elements                               |
+| `pq_reset(pq)`          | Clear all elements but keep allocated capacity                    |
+| `pq_print(pq)`          | Print each element to stdout (debug helper)                       |
+| `pq_free(pq)`           | Free backing storage (alias of `vector_free`)                     |
+| `pq_set_allocator(...)` | Attach a custom allocator (alias of `vector_set_allocator`)       |
 
 ## Example
 
 ```c
 #include "edsa.h"
+
 #include <stdio.h>
 
 int main(void) {
   int *pq = NULL;
+  unsigned char buf[256];
+  AllocatorArena arena = {0};
+
+  printf("empty: %d\n", pq_is_empty(pq));
+  printf("size: %zu\n", pq_size(pq));
+
+  allocator_arena_init(&arena, buf, sizeof(buf));
+  pq_set_allocator(pq, &arena, allocator_arena_alloc, NULL);
 
   pq_insert(pq, 30);
   pq_insert(pq, 10);
   pq_insert(pq, 20);
 
-  printf("%d\n", pq_get_min(pq)); /* 10 */
+  printf("size: %zu\n", pq_size(pq));
+  printf("min: %d\n", pq_get_min(pq));
+  pq_print(pq);
 
   pq_delete_min(pq);
-  printf("%d\n", pq_get_min(pq)); /* 20 */
+  printf("min after pop: %d\n", pq_get_min(pq));
+
+  pq_reset(pq);
+  printf("empty after reset: %d\n", pq_is_empty(pq));
+
+  pq_insert(pq, 5);
+  printf("min after reset: %d\n", pq_get_min(pq));
 
   pq_free(pq);
+
+  return 0;
 }
 ```
