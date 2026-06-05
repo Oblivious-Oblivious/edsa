@@ -64,49 +64,16 @@
   },
   "compile-flags": {
     "darwin": {
-      "cc": "clang",
-      "debug": {
-        "opt": "-O2",
-        "version": "-std=c89",
-        "flags": "-g -fsanitize=address",
-        "warnings": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic"
-      },
-      "release": {
-        "opt": "-O2",
-        "version": "-std=c89",
-        "flags": "",
-        "warnings": ""
-      }
+      "debug": ["clang", "-O2", "-std=c89", "-g", "-fsanitize=address", "-Wall", "-Wextra", "-Werror", "-pedantic", "-pedantic-errors", "-Wpedantic"],
+      "release": ["clang", "-O2", "-std=c89"]
     },
     "linux": {
-      "cc": "gcc",
-      "debug": {
-        "opt": "-O2",
-        "version": "-std=c89",
-        "flags": "-g",
-        "warnings": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic"
-      },
-      "release": {
-        "opt": "-O2",
-        "version": "-std=c89",
-        "flags": "",
-        "warnings": ""
-      }
+      "debug": ["gcc", "-O2", "-std=c89", "-g", "-Wall", "-Wextra", "-Werror", "-pedantic", "-pedantic-errors", "-Wpedantic"],
+      "release": ["gcc", "-O2", "-std=c89"]
     },
     "win32": {
-      "cc": "gcc",
-      "debug": {
-        "opt": "-O2",
-        "version": "-std=c89",
-        "flags": "-g",
-        "warnings": "-Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic"
-      },
-      "release": {
-        "opt": "-O2",
-        "version": "-std=c89",
-        "flags": "",
-        "warnings": ""
-      }
+      "debug": ["gcc", "-O2", "-std=c89", "-g", "-Wall", "-Wextra", "-Werror", "-pedantic", "-pedantic-errors", "-Wpedantic"],
+      "release": ["gcc", "-O2", "-std=c89"]
     }
   },
   "dependencies": {},
